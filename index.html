@@ -1051,12 +1051,19 @@
             gap: 1.25rem;
             margin-bottom: 2rem;
             padding: 1.75rem 2rem;
-            background: var(--bg-card);
-            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(139, 92, 246, 0.05) 50%, rgba(244, 114, 182, 0.03) 100%);
+            border-radius: 20px;
             border: 1px solid var(--border-medium);
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 8px 32px rgba(34, 211, 238, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
+            transition: all 0.4s var(--animation-smooth);
+        }
+
+        .category-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(34, 211, 238, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: rgba(34, 211, 238, 0.3);
         }
 
         .category-header::before {
@@ -1066,7 +1073,32 @@
             top: 0;
             bottom: 0;
             width: 5px;
-            background: var(--gradient-cyan);
+            background: var(--gradient-border);
+            background-size: 100% 300%;
+            animation: verticalGradientFlow 3s ease infinite;
+        }
+
+        @keyframes verticalGradientFlow {
+
+            0%,
+            100% {
+                background-position: 0% 0%;
+            }
+
+            50% {
+                background-position: 0% 100%;
+            }
+        }
+
+        .category-header::after {
+            content: '';
+            position: absolute;
+            right: -50px;
+            top: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .category-icon {
@@ -1683,15 +1715,357 @@
             border-radius: 8px;
             padding: 1rem 1.25rem 1rem 1.25rem;
             padding-top: 2.5rem;
-            /* 为顶部圆点留出空间 */
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            overflow-x: auto;
-            line-height: 1.7;
-            margin-top: 0.75rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
+
+        /* ==================== 核心概念组件 (Concept Widget) ==================== */
+        .concept-widget {
+            background: linear-gradient(145deg, rgba(34, 211, 238, 0.05), rgba(167, 139, 250, 0.05));
+            border: 1px dashed var(--accent-cyan);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .concept-widget:hover {
+            border-style: solid;
+            background: linear-gradient(145deg, rgba(34, 211, 238, 0.08), rgba(167, 139, 250, 0.08));
+            box-shadow: 0 4px 20px rgba(34, 211, 238, 0.1);
+        }
+
+        .concept-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .concept-title-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .concept-icon {
+            font-size: 1.2rem;
+            filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.5));
+        }
+
+        .concept-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .concept-arrow {
+            color: var(--text-dim);
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .concept-widget.expanded .concept-arrow {
+            transform: rotate(180deg);
+            color: var(--accent-cyan);
+        }
+
+        .concept-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.3);
+            border-top: 1px solid transparent;
+        }
+
+        .concept-widget.expanded .concept-content {
+            max-height: 600px;
+            opacity: 1;
+            padding: 1.5rem;
+            border-top-color: rgba(34, 211, 238, 0.1);
+        }
+
+        .concept-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .concept-text strong {
+            color: var(--text-primary);
+        }
+
+        .concept-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .concept-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .concept-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0.5rem;
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+
+        /* ==================== Knowledge Hub Styles ==================== */
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .knowledge-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            overflow: hidden;
+        }
+
+        .knowledge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                    rgba(59, 130, 246, 0.1) 0%,
+                    rgba(139, 92, 246, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            border-radius: 16px;
+            z-index: 0;
+        }
+
+        .knowledge-card:hover::before {
+            opacity: 1;
+        }
+
+        .knowledge-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15),
+                0 0 0 1px rgba(59, 130, 246, 0.1);
+        }
+
+        .knowledge-card-header {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .knowledge-icon {
+            font-size: 3rem;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .knowledge-card-title {
+            flex: 1;
+        }
+
+        .knowledge-card-title h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .knowledge-meta {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty-beginner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .difficulty-intermediate {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .difficulty-advanced {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .reading-time {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .knowledge-description {
+            position: relative;
+            z-index: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .knowledge-expand-btn {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .knowledge-expand-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateX(4px);
+        }
+
+        .knowledge-expand-btn .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .knowledge-card.expanded .knowledge-expand-btn .arrow {
+            transform: rotate(90deg);
+        }
+
+        .knowledge-content {
+            position: relative;
+            z-index: 1;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 0;
+        }
+
+        .knowledge-card.expanded .knowledge-content {
+            max-height: 2000px;
+            margin-top: 1.5rem;
+        }
+
+        .knowledge-content-inner {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .knowledge-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .knowledge-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .knowledge-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .knowledge-section li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .knowledge-section li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .knowledge-section code {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875em;
+            color: #60a5fa;
+        }
+
+        @media (max-width: 768px) {
+            .knowledge-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .knowledge-card {
+                padding: 1.5rem;
+            }
+
+            .knowledge-icon {
+                font-size: 2.5rem;
+            }
+
+            .knowledge-card-title h3 {
+                font-size: 1.25rem;
+            }
+        }
+
+
+
 
         .output-block code {
             white-space: pre;
@@ -1964,6 +2338,29 @@
                     </ul>
                 </div>
 
+                <!-- Knowledge Hub Section -->
+                <div class="sidebar-group-title">📚 知识库</div>
+                <ul class="nav-list">
+                    <li class="nav-category">
+                        <div class="nav-category-header" data-target="knowledge">
+                            <span class="nav-category-title"><span class="nav-category-icon">🎓</span>核心知识点</span>
+                            <span class="nav-category-arrow">▶</span>
+                        </div>
+                        <ul class="nav-sub-list">
+                            <li class="nav-sub-item">
+                                <button class="cmd-tag">系统架构</button>
+                                <button class="cmd-tag">Shell原理</button>
+                                <button class="cmd-tag">文件系统</button>
+                                <button class="cmd-tag">进程管理</button>
+                                <button class="cmd-tag">网络协议</button>
+                                <button class="cmd-tag">内存管理</button>
+                                <button class="cmd-tag">安全机制</button>
+                                <button class="cmd-tag">I/O模型</button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
                 <!-- Group 1: Core Operations -->
                 <div class="sidebar-group-title">基础核心</div>
                 <ul class="nav-list">
@@ -1980,6 +2377,9 @@
                                 <button class="cmd-tag">uptime</button>
                                 <button class="cmd-tag">echo</button>
                                 <button class="cmd-tag">man</button>
+                                <button class="cmd-tag">help</button>
+                                <button class="cmd-tag">info</button>
+                                <button class="cmd-tag">whatis</button>
                             </li>
                         </ul>
                     </li>
@@ -2060,8 +2460,11 @@
                                 <button class="cmd-tag">du</button>
                                 <button class="cmd-tag">free</button>
                                 <button class="cmd-tag">uname</button>
+                                <button class="cmd-tag">hostnamectl</button>
+                                <button class="cmd-tag">uptime</button>
                                 <button class="cmd-tag">lsof</button>
                                 <button class="cmd-tag">who</button>
+                                <button class="cmd-tag">whoami</button>
                                 <button class="cmd-tag">w</button>
                                 <button class="cmd-tag">last</button>
                             </li>
@@ -2116,6 +2519,8 @@
                                 <button class="cmd-tag">killall</button>
                                 <button class="cmd-tag">pkill</button>
                                 <button class="cmd-tag">jobs</button>
+                                <button class="cmd-tag">bg</button>
+                                <button class="cmd-tag">fg</button>
                                 <button class="cmd-tag">nohup</button>
                             </li>
                         </ul>
@@ -2131,6 +2536,11 @@
                                 <button class="cmd-tag">service</button>
                                 <button class="cmd-tag">journalctl</button>
                                 <button class="cmd-tag">crontab</button>
+                                <button class="cmd-tag">timedatectl</button>
+                                <button class="cmd-tag">shutdown</button>
+                                <button class="cmd-tag">reboot</button>
+                                <button class="cmd-tag">init</button>
+                                <button class="cmd-tag">runlevel</button>
                             </li>
                         </ul>
                     </li>
@@ -2160,6 +2570,9 @@
                                 <button class="cmd-tag">history</button>
                                 <button class="cmd-tag">alias</button>
                                 <button class="cmd-tag">export</button>
+                                <button class="cmd-tag">echo</button>
+                                <button class="cmd-tag">printf</button>
+                                <button class="cmd-tag">clear</button>
                                 <button class="cmd-tag">date</button>
                             </li>
                         </ul>
@@ -2264,12 +2677,430 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-category">
+                        <div class="nav-category-header" data-target="database">
+                            <span class="nav-category-title"><span class="nav-category-icon">💾</span>Databases</span>
+                            <span class="nav-category-arrow">▶</span>
+                        </div>
+                        <ul class="nav-sub-list">
+                            <li class="nav-sub-item">
+                                <button class="cmd-tag">mysql</button>
+                                <button class="cmd-tag">redis-cli</button>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-category">
+                        <div class="nav-category-header" data-target="security">
+                            <span class="nav-category-title"><span class="nav-category-icon">🛡️</span>Security</span>
+                            <span class="nav-category-arrow">▶</span>
+                        </div>
+                        <ul class="nav-sub-list">
+                            <li class="nav-sub-item">
+                                <button class="cmd-tag">ufw</button>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </aside>
 
         <!-- 主内容区域 -->
         <main class="content">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumbs" id="breadcrumbs">
+                <div class="breadcrumb-item">
+                    <span class="breadcrumb-link">Linux 速查</span>
+                </div>
+                <!-- 动态生成后续路径 -->
+            </div>
+
+            <!-- 页面标题 -->
+            <header class="page-header">
+                <h1 class="page-title">Linux 常用命令速查手册</h1>
+            </header>
+
+            <!-- ============ 知识库 (Knowledge Hub) ============ -->
+            <section id="knowledge" class="category-section">
+                <div class="category-header">
+                    <span class="category-icon">🎓</span>
+                    <div class="category-info">
+                        <h2>Linux 核心知识库</h2>
+                        <p>深入理解 Linux 底层原理，从入门到精通的系统化知识体系</p>
+                    </div>
+                </div>
+
+                <div class="knowledge-grid">
+                    <!-- Knowledge Card 1: Linux Architecture -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">🏛️</div>
+                            <div class="knowledge-card-title">
+                                <h3>Linux 系统架构</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-beginner">初级</span>
+                                    <span class="reading-time">⏱️ 5 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            理解 Ring 0 内核态与 Ring 3 用户态，掌握内核模块与系统调用的交互机制。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 核心分层 (Protection Rings)</h4>
+                                    <ul>
+                                        <li><strong>Ring 0 (内核态)</strong>：拥有最高权限，直接控制 CPU、内存、硬件设备。崩溃会导致系统死机。</li>
+                                        <li><strong>Ring 3 (用户态)</strong>：应用程序运行层，权限受限。崩溃只影响当前进程。</li>
+                                        <li><strong>切换开销</strong>：用户态调用系统调用 (System Call) 进入内核态，需要保存上下文，开销较大。</li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 关键组件</h4>
+                                    <ul>
+                                        <li><strong>VFS</strong>：虚拟文件系统，统一管理 EXT4, NTFS, NFS 等。</li>
+                                        <li><strong>LKM (Loadable Kernel Modules)</strong>：动态加载内核模块（驱动），无需重启内核。
+                                            <code style="display:block; margin-top:5px">lsmod | grep driver_name</code>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 2: Shell Internals -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">🐚</div>
+                            <div class="knowledge-card-title">
+                                <h3>Shell 工作原理</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-intermediate">中级</span>
+                                    <span class="reading-time">⏱️ 8 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            深入命令查找优先级、环境变量继承规则及各种 Shell 的差异。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 命令执行优先级</h4>
+                                    <ol style="color: var(--text-secondary); padding-left: 1.5rem; line-height: 1.6;">
+                                        <li><strong>Alias</strong> (别名)：<code>alias ll='ls -l'</code></li>
+                                        <li><strong>Keyword</strong> (关键字)：<code>if</code>, <code>for</code>,
+                                            <code>function</code>
+                                        </li>
+                                        <li><strong>Function</strong> (函数)：用户定义的函数</li>
+                                        <li><strong>Builtin</strong> (内置命令)：<code>cd</code>, <code>echo</code>,
+                                            <code>pwd</code> (Shell 自带，无需 Fork)
+                                        </li>
+                                        <li><strong>$PATH</strong> (外部命令)：按路径顺序查找可执行文件</li>
+                                    </ol>
+                                    <p style="font-size:0.9em; margin-top:0.5rem">💡 用 <code>type -a command</code>
+                                        查看命令类型。</p>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 配置文件加载顺序 (Bash)</h4>
+                                    <ul>
+                                        <li><strong>Login Shell</strong> (SSH登录)：<code>/etc/profile</code> →
+                                            <code>~/.bash_profile</code>
+                                        </li>
+                                        <li><strong>Non-Login Shell</strong> (打开新终端)：<code>~/.bashrc</code></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 3: File Systems -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">📂</div>
+                            <div class="knowledge-card-title">
+                                <h3>文件系统深度解析</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-advanced">高级</span>
+                                    <span class="reading-time">⏱️ 12 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            Inode 耗尽问题、日志文件系统 (Journaling) 原理及软硬链接的底层差异。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 存储结构：Block vs Inode</h4>
+                                    <ul>
+                                        <li><strong>Block</strong> (数据块)：存储实际文件内容（默认 4KB）。大文件占用多个 Block。</li>
+                                        <li><strong>Inode</strong> (元数据)：存储权限、所有者、时间戳、Block 指针。</li>
+                                        <li><strong>故障排查</strong>：磁盘空间有剩但无法创建文件？可能是 <strong>Inode 耗尽</strong>
+                                            (<code>df -i</code> 查看)。通常是小文件过多导致。</li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 日志文件系统 (Journaling)</h4>
+                                    <ul>
+                                        <li>如 ext4, xfs。</li>
+                                        <li><strong>原理</strong>：写入数据前先记录日志 (Journal)。</li>
+                                        <li><strong>优势</strong>：断电重启后，只需重放日志即可快速恢复文件系统一致性，无需全盘扫描 (fsck)。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 4: Process Lifecycle -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">⚙️</div>
+                            <div class="knowledge-card-title">
+                                <h3>进程生命周期</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-intermediate">中级</span>
+                                    <span class="reading-time">⏱️ 10 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            进程调度优先级 (Nice)、孤儿/僵尸进程差异及各类信号 (Signal) 的处理机制。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 优先级控制 (Nice Value)</h4>
+                                    <ul>
+                                        <li>范围：<strong>-20</strong> (最高优) 到 <strong>19</strong> (最低优，默认 0)。</li>
+                                        <li>调整：<code>nice -n -5 cmd</code> (启动时), <code>renice -5 -p pid</code> (运行时)。
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 常见信号 (Signals)</h4>
+                                    <table
+                                        style="width:100%; font-size:0.85rem; border-collapse: collapse; margin-top:0.5rem; color: var(--text-secondary);">
+                                        <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                                            <td style="padding:4px;">SIGINT (2)</td>
+                                            <td>Ctrl+C</td>
+                                            <td>中断（应用可捕获处理）</td>
+                                        </tr>
+                                        <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                                            <td style="padding:4px;">SIGKILL (9)</td>
+                                            <td>Kill -9</td>
+                                            <td><strong>强制杀死</strong>（不可捕获/忽略）</td>
+                                        </tr>
+                                        <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                                            <td style="padding:4px;">SIGTERM (15)</td>
+                                            <td>Kill</td>
+                                            <td>主要终止（应用可善后退出）</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:4px;">SIGSTOP (19)</td>
+                                            <td>Ctrl+Z</td>
+                                            <td>暂停进程（不可捕获）</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 5: Network Stack -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">🌐</div>
+                            <div class="knowledge-card-title">
+                                <h3>网络协议栈</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-intermediate">中级</span>
+                                    <span class="reading-time">⏱️ 15 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            TCP 状态机详解 (TIME_WAIT, CLOSE_WAIT) 及常用网络调试工具链。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 TCP 状态机关键点</h4>
+                                    <ul>
+                                        <li><strong>ESTABLISHED</strong>：连接已建立，正在通信。</li>
+                                        <li><strong>TIME_WAIT</strong> (主动关闭方)：等待 2MSL 时间，确保对方收到 ACK。大量 TIME_WAIT
+                                            意味着高并发短连接。</li>
+                                        <li><strong>CLOSE_WAIT</strong> (被动关闭方)：收到 FIN 但应用层还没调用 close()。大量 CLOSE_WAIT
+                                            意味着代码有 Bug（未关闭连接）。</li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 调试工具链</h4>
+                                    <ul>
+                                        <li>连通性：<code>ping</code> (ICMP), <code>telnet</code> (TCP端口)</li>
+                                        <li>抓包：<code>tcpdump</code>, <code>wireshark</code></li>
+                                        <li>连接状态：<code>ss -tunlp</code>, <code>netstat -an</code></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 6: Memory Management -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">💾</div>
+                            <div class="knowledge-card-title">
+                                <h3>内存管理机制</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-advanced">高级</span>
+                                    <span class="reading-time">⏱️ 10 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            Buffer vs Cache 区别，Swap 机制及如何正确解读 <code>free -h</code>。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 Buffer vs Cache</h4>
+                                    <ul>
+                                        <li><strong>Buffer</strong>：<strong>块设备</strong>的读写缓冲区（如磁盘元数据）。</li>
+                                        <li><strong>Cache</strong> (Page Cache)：<strong>文件系统</strong>文件的缓存。Linux
+                                            会尽可能不仅用内存做 Cache。</li>
+                                        <li><strong>Available</strong>：实际可用内存 = Free + Reclaimable Cache。</li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 OOM Killer (内存溢出杀手)</h4>
+                                    <ul>
+                                        <li>当物理内存 + Swap 耗尽时触发。</li>
+                                        <li>系统会根据 <code>oom_score</code> 打分，优先杀死占用高且非核心的进程（如 Java, Python 进程）。</li>
+                                        <li>日志查看：<code>dmesg | grep -i "out of memory"</code></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 7: Security -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">🔐</div>
+                            <div class="knowledge-card-title">
+                                <h3>权限与安全机制</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-intermediate">中级</span>
+                                    <span class="reading-time">⏱️ 8 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            八进制权限计算法 (755, 644)，Umask 默认权限及特殊位 (SUID, Sticky)。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 权限数字计算</h4>
+                                    <div
+                                        style="background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; margin-bottom:10px; font-family:monospace;">
+                                        R (Read) = 4<br>
+                                        W (Write) = 2<br>
+                                        X (Exec) = 1<br>
+                                        -----------<br>
+                                        RWX = 7, RW- = 6, R-X = 5
+                                    </div>
+                                    <ul>
+                                        <li><code>chmod 755</code>：自己(RWX) 组(R-X) 其他(R-X) → 适合程序/脚本。</li>
+                                        <li><code>chmod 644</code>：自己(RW-) 组(R--) 其他(R--) → 适合配置文件。</li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 Umask</h4>
+                                    <ul>
+                                        <li>决定新建文件的默认权限。</li>
+                                        <li>默认 022：目录 777-022=755，文件 666-022=644。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Card 8: I/O Models -->
+                    <div class="knowledge-card" onclick="toggleKnowledgeCard(this)">
+                        <div class="knowledge-card-header">
+                            <div class="knowledge-icon">🔄</div>
+                            <div class="knowledge-card-title">
+                                <h3>I/O 模型与多路复用</h3>
+                                <div class="knowledge-meta">
+                                    <span class="difficulty-badge difficulty-advanced">高级</span>
+                                    <span class="reading-time">⏱️ 12 分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="knowledge-description">
+                            BIO vs NIO，Select/Poll 瓶颈与 Epoll 高效原理对比。
+                        </p>
+                        <button class="knowledge-expand-btn">
+                            <span>展开详情</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <div class="knowledge-content">
+                            <div class="knowledge-content-inner">
+                                <div class="knowledge-section">
+                                    <h4>🔹 五种 I/O 模型</h4>
+                                    <ul>
+                                        <li><strong>阻塞 I/O (BIO)</strong>：死等数据。</li>
+                                        <li><strong>非阻塞 I/O (NIO)</strong>：忙轮询 (CPU 占用高)。</li>
+                                        <li><strong>I/O 多路复用</strong>：select/epoll (最常用，Nginx/Redis/Node.js 基石)。</li>
+                                        <li><strong>信号驱动 I/O</strong>：内核通知。</li>
+                                        <li><strong>异步 I/O (AIO)</strong>：完全后台处理 (Linux 支持尚不完美)。</li>
+                                    </ul>
+                                </div>
+                                <div class="knowledge-section">
+                                    <h4>🔹 为什么 Epoll 快？</h4>
+                                    <ul>
+                                        <li><strong>Select/Poll</strong>：每次都要把所有 FD 列表从用户态复制到内核态，且轮询所有 socket (O(N))。
+                                        </li>
+                                        <li><strong>Epoll</strong>：内核维护红黑树 + 就绪链表。只有活跃的 socket 才会触发回调 (O(1))，无内存复制开销。
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ============ 系统与基础 ============ -->
             <section id="basics" class="category-section">
                 <div class="category-header">
@@ -2328,6 +3159,7 @@
                         </div>
                     </article>
 
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">echo</h3>
@@ -2361,20 +3193,71 @@
                             <code><span class="command">man</span> <span class="syntax-arg">ls</span></code>
                         </div>
                     </article>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">help</h3>
+                            <span class="command-badge">内置</span>
+                        </div>
+                        <p class="command-description">查看 Shell 内置命令 (Built-ins) 的帮助信息</p>
+                        <div class="usage-block">
+                            <span class="usage-label">Usage:</span>
+                            <code><span class="syntax-cmd">help</span> <span class="syntax-arg">[command]</span></code>
+                        </div>
+                        <div class="examples-section">
+                            <h4 class="section-title">实用示例</h4>
+                            <div class="example-item">
+                                <div class="example-label">查看 cd 命令帮助</div>
+                                <div class="code-block">
+                                    <code><span class="command">help</span> <span class="string">cd</span></code>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">List all built-ins</div>
+                                <div class="code-block"><code><span class="command">help</span></code></div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">whatis / apropos</h3>
+                            <span class="command-badge">查询</span>
+                        </div>
+                        <p class="command-description">快速查询命令功能或通过关键字搜索手册</p>
+                        <div class="examples-section">
+                            <h4 class="section-title">实用示例</h4>
+                            <div class="example-item">
+                                <div class="example-label">查看命令的一句话描述</div>
+                                <div class="code-block">
+                                    <code><span class="command">whatis</span> <span class="string">ls</span></code>
+                                </div>
+                                <div class="output-block"><code>ls (1)  - list directory contents</code></div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">通过关键字搜索命令</div>
+                                <div class="code-block">
+                                    <code><span class="command">apropos</span> <span class="string">zip</span></code>
+                                </div>
+                                <div class="output-block"><code>gzip (1) - compress or expand files...</code></div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">info</h3>
+                            <span class="command-badge">详细</span>
+                        </div>
+                        <p class="command-description">查看 GNU 项目的 Info 文档（比 man 更详细，支持超链接）</p>
+                        <div class="usage-block">
+                            <span class="usage-label">Usage:</span>
+                            <code><span class="syntax-cmd">info</span> <span class="syntax-arg">[command]</span></code>
+                        </div>
+                    </article>
                 </div>
             </section>
-            <!-- 面包屑导航 -->
-            <div class="breadcrumbs" id="breadcrumbs">
-                <div class="breadcrumb-item">
-                    <span class="breadcrumb-link">Linux 速查</span>
-                </div>
-                <!-- 动态生成后续路径 -->
-            </div>
 
-            <!-- 页面标题 -->
-            <header class="page-header">
-                <h1 class="page-title">Linux 常用命令速查手册</h1>
-            </header>
 
             <!-- ============ 示例内容：文件与目录操作 ============ -->
             <section id="files" class="category-section">
@@ -2388,6 +3271,39 @@
 
                 <div class="commands-grid">
                     <!-- 命令卡片示例 -->
+                    <!-- Concept Widget: File System Hierarchy -->
+                    <div class="concept-widget" id="concept-fs">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📂</span>
+                                <span class="concept-title">了解核心概念：文件系统层级 (FHS)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 遵循 <strong>FHS (Filesystem Hierarchy Standard)</strong>
+                                标准，所有目录都有明确的用途。了解这些约定有助于快速定位文件。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">关键目录：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>/bin, /usr/bin</strong>：普通用户可执行的命令（如 ls, cp）。</li>
+                                    <li><strong>/sbin, /usr/sbin</strong>：管理员 (root) 可执行的系统管理命令（如 reboot, iptables）。
+                                    </li>
+                                    <li><strong>/etc</strong>：系统配置文件（绝大多数配置都在这）。</li>
+                                    <li><strong>/var</strong>：可变数据（如日志 /var/log，缓存 /var/cache）。</li>
+                                    <li><strong>/home</strong>：普通用户的家目录。<strong>/root</strong>：管理员的家目录。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>提示：<code>~</code> 代表当前用户的家目录，<code>.</code> 代表当前目录，<code>..</code> 代表上级目录。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">ls</h3>
@@ -2815,6 +3731,39 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: File Search -->
+                    <div class="concept-widget" id="concept-find">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔍</span>
+                                <span class="concept-title">了解核心概念：Linux 文件查找策略</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 提供了两种主要的查找工具：<strong>实时查找 (find)</strong> 和 <strong>索引查找
+                                    (locate)</strong>。了解它们的区别是高效工作的关键。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">工具对比：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>find</strong>：强大但慢。实时扫描磁盘，支持按名称、大小、时间、权限等复杂条件搜索，还能对搜索结果执行操作（如删除）。</li>
+                                    <li><strong>locate</strong>：极快但可能有延迟。搜索预生成的数据库 (mlocate.db)，查询速度极快，但无法搜到刚创建的文件（需运行
+                                        <code>updatedb</code> 更新索引）。
+                                    </li>
+                                    <li><strong>which / whereis</strong>：专用于查找可执行命令的位置。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>技巧：经常使用 <code>find /path -name "*.log"</code> 这种格式。注意文件通配符 <code>*</code>
+                                    最好用引号包起来，防止被 Shell 提前展开。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">find</h3>
@@ -2962,6 +3911,37 @@
                             </div>
                         </div>
                     </article>
+
+                    <!-- Concept Widget: File Links -->
+                    <div class="concept-widget" id="concept-ln">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔗</span>
+                                <span class="concept-title">了解核心概念：软链接 (Soft) vs 硬链接 (Hard)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 中有两种链接方式，它们都指向文件，但机制完全不同。最常用的是软链接（类似于 Windows 的快捷方式）。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">对比：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>软链接 (Symbolic
+                                            Link)</strong>：指向原始文件的"路径"。若原文件删除，链接失效。可跨分区，可链接目录。<strong>(常用)</strong></li>
+                                    <li><strong>硬链接 (Hard Link)</strong>：指向原始文件的"inode
+                                        データ"。若原文件删除，链接仍有效（除了文件名不同，内容完全一致）。不可跨分区，不可链接目录。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>最佳实践：总是使用 <code>ln -s target link_name</code> 创建软链接。用 <code>ls -l</code>
+                                    可以看到箭头指向：<code>link -> target</code>。</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <article class="command-card">
                         <div class="command-header">
@@ -3278,6 +4258,40 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: Text Processing -->
+                    <div class="concept-widget" id="concept-text">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📝</span>
+                                <span class="concept-title">了解核心概念：文本处理与正则表达式</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 遵循 "一切即文本" 的哲学。文本处理工具 "三剑客" (<strong>grep, sed, awk</strong>) 配合 <strong>正则表达式
+                                    (Regex)</strong>，构成了 Linux 最强大的数据处理能力。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">核心工具角色：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>grep</strong> (Global Regular Expression
+                                        Print)：<strong>查找</strong>。擅长筛选行。</li>
+                                    <li><strong>sed</strong> (Stream Editor)：<strong>编辑</strong>。擅长替换、删除、修改行。</li>
+                                    <li><strong>awk</strong>：<strong>报表生成</strong>。擅长对列进行处理、计算统计。</li>
+                                    <li><strong>Regex</strong>：通用的文本匹配规则（如 <code>^</code> 行首, <code>$</code> 行尾,
+                                        <code>.</code> 任意字符, <code>*</code> 重复）。
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>学习建议：先掌握 grep 筛选数据，再用 awk 提取特定列，最后用 sort/uniq 统计分析。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">grep</h3>
@@ -3514,6 +4528,43 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Regex -->
+                    <div class="concept-widget" id="concept-regex">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🧩</span>
+                                <span class="concept-title">了解核心概念：正则表达式 (Regex) 速查</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                grep, sed, awk 都依赖正则表达式进行模式匹配。掌握以下核心符号，各工具即可通用。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">基础符号
+                                    (Basic)：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><code>^</code>：匹配行首。如 <code>^root</code> 匹配以 root 开头的行。</li>
+                                    <li><code>$</code>：匹配行尾。如 <code>bash$</code> 匹配以 bash 结尾的行。</li>
+                                    <li><code>.</code>：匹配任意单个字符。</li>
+                                    <li><code>*</code>：匹配前一个字符 0 次或多次。</li>
+                                    <li><code>[]</code>：匹配括号内任意字符。如 <code>[Aa]</code> 匹配 A 或 a。</li>
+                                </ul>
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">扩展符号
+                                    (Extended, 需要 -E)：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><code>+</code>：匹配前一个字符 1 次或多次。</li>
+                                    <li><code>?</code>：匹配前一个字符 0 次或 1 次。</li>
+                                    <li><code>|</code>：或 (OR)。如 <code>error|fail</code>。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">awk</h3>
@@ -3934,6 +4985,38 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: System Monitoring -->
+                    <div class="concept-widget" id="concept-monitor">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📈</span>
+                                <span class="concept-title">了解核心概念：系统负载 (Load Average)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 系统监控最关键的指标之一就是 <strong>Load Average (平均负载)</strong>，通常有三个数值，分别代表过去
+                                1分钟、5分钟、15分钟的平均活跃进程数。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">如何看懂负载？
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>单核 CPU</strong>：Load = 1.0 表示满负荷。超过 1.0 意味着有进程在排队等待 CPU。</li>
+                                    <li><strong>多核 CPU</strong>：Load 上限 = CPU 核心数。例如 4 核 CPU，Load=4.0 才算满负荷。</li>
+                                    <li><strong>趋势分析</strong>：若 1分钟 > 15分钟，说明负载在升高；若 1分钟 < 15分钟，说明负载在降低。</li>
+                                    <li><strong>CPU vs I/O</strong>：高 Load 可能源于 CPU 密集型计算，也可能源于磁盘 I/O 等待 (iowait)。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>命令推荐：<code>top</code> (经典), <code>htop</code> (更人性化), <code>vmstat</code>
+                                    (详细内存/IO数据)。按 `1` 键可在 top 中查看每个 CPU 核心的使用率。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">top</h3>
@@ -4041,6 +5124,41 @@
                             </div>
                         </div>
                     </article>
+
+                    <!-- Concept Widget: Disk Storage -->
+                    <div class="concept-widget" id="concept-disk">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">💽</span>
+                                <span class="concept-title">了解核心概念：磁盘存储与挂载</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 将所有设备都视为文件。与 Windows 的盘符 (C:, D:) 不同，Linux 采用<strong>单根文件系统结构 (Single Root
+                                    Tree)</strong>，所有存储设备都<strong>挂载 (Mount)</strong> 到 <code>/</code> 下的某个目录中。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">关键概念：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>挂载点 (Mount Point)</strong>：访问设备的入口目录（如 <code>/mnt/usb</code>,
+                                        <code>/home</code>）。
+                                    </li>
+                                    <li><strong>设备文件</strong>：<code>/dev/sda</code> (第一块物理硬盘), <code>/dev/sda1</code>
+                                        (第一个分区)。</li>
+                                    <li><strong>文件系统</strong>：ext4 (标准), xfs (高性能), tmpfs (内存盘)。</li>
+                                    <li><strong>inode</strong>：存储文件元数据（权限、所有者、位置），inode 耗尽也会导致无法创建文件。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>命令辨析：<code>df -h</code> 查看磁盘空间 (Disk Free)，<code>du -sh</code> 查看目录占用大小 (Disk
+                                    Usage)。</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <article class="command-card">
                         <div class="command-header">
@@ -4463,6 +5581,54 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: File Permissions -->
+                    <div class="concept-widget" id="concept-permissions">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔐</span>
+                                <span class="concept-title">了解核心概念：Linux 文件权限系统</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 采用 <strong>UGO (User-Group-Other)</strong> 权限模型，每个文件/目录都有三组权限：<strong>所有者
+                                    (u)</strong>、<strong>所属组 (g)</strong> 和 <strong>其他用户 (o)</strong>。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+                                    权限计算器 (Permission Decoder)：</h4>
+                                <table class="options-table">
+                                    <tr>
+                                        <td><strong>755</strong></td>
+                                        <td><code>rwx r-x r-x</code></td>
+                                        <td>标准权限 (程序/目录)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>644</strong></td>
+                                        <td><code>rw- r-- r--</code></td>
+                                        <td>文件权限 (配置文件)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>777</strong></td>
+                                        <td><code>rwx rwx rwx</code></td>
+                                        <td><span class="warning">全开模式 (慎用!)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>600</strong></td>
+                                        <td><code>rw- --- ---</code></td>
+                                        <td><span class="highlight">私密模式 (SSH Key)</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>示例：<code>chmod 755 script.sh</code> 等价于
+                                    <code>rwxr-xr-x</code>（所有者全部权限，组和其他人只读+执行）</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">chmod</h3>
@@ -4745,6 +5911,37 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: User Groups -->
+                    <div class="concept-widget" id="concept-groups">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📘</span>
+                                <span class="concept-title">了解核心概念：什么是用户组？</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                在 Linux 系统中，<strong>用户组 (User Group)</strong>
+                                是用于管理和控制一组用户权限的机制。通过将多个用户归入同一个组，可以统一设置他们对文件和资源的访问权限。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">关键知识点：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li>每个用户必须属于一个<strong>主组 (Primary Group)</strong>，通常与用户名同名。</li>
+                                    <li>用户可以同时属于多个<strong>附加组 (Secondary Groups)</strong>，用于获得额外权限。</li>
+                                    <li>组信息存储在 <code>/etc/group</code> 文件中。</li>
+                                    <li>文件权限中的 "组权限" (G) 就是针对该文件所属组的成员生效的。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>提示：合理使用用户组可以极大简化多用户环境下的权限管理工作。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">groupadd</h3>
@@ -4880,6 +6077,37 @@
                             </div>
                         </div>
                     </article>
+
+                    <!-- Concept Widget: User Privileges -->
+                    <div class="concept-widget" id="concept-sudo">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🛡️</span>
+                                <span class="concept-title">了解核心概念：用户提权与 Root</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 中，<strong>Root (超级用户)</strong> 拥有系统的最高控制权。为了防止误操作，普通用户默认权限受限。<strong>sudo
+                                    (SuperUser DO)</strong> 允许普通用户以 Root 身份临时执行命令。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">机制与配置：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>/etc/sudoers</strong>：定义了哪些用户可以使用 sudo (可用 <code>visudo</code> 编辑)。</li>
+                                    <li><strong>su vs sudo</strong>：<code>su</code> 切换到另一个用户（需要目标用户密码）；<code>sudo</code>
+                                        临时借用 Root 权限（验证当前用户密码）。</li>
+                                    <li><strong>sudo -i</strong>：获取完整的 Root Shell 环境。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>安全准则：不到万不得已，不要直接用 root 账号登录系统。尽量使用 sudo 来执行管理任务，以便留下审计日志。</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <article class="command-card">
                         <div class="command-header">
@@ -5185,6 +6413,76 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Load Average -->
+                    <div class="concept-widget" id="concept-load">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📊</span>
+                                <span class="concept-title">了解核心概念：系统负载 (Load Average)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                <strong>Load Average</strong> 代表单位时间内"处于可运行状态"或"不可中断等待状态"的平均进程数。
+                            </p>
+                            <div style="margin-bottom: 1.0rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">如何解读
+                                    uptime 的三个数字？
+                                </h4>
+                                <div class="code-block" style="margin-bottom: 0.5rem;">
+                                    <code>load average: 0.50, 2.10, 5.00</code>
+                                </div>
+                                <ul class="concept-list">
+                                    <li>第一个数字：<strong>1分钟</strong>内的平均负载</li>
+                                    <li>第二个数字：<strong>5分钟</strong>内的平均负载</li>
+                                    <li>第三个数字：<strong>15分钟</strong>内的平均负载</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span><strong>负载高不高，取决于 CPU 核数：</strong><br>
+                                    单核 CPU：Load 1.0 = 100% 满载<br>
+                                    四核 CPU：Load 4.0 = 100% 满载<br>
+                                    简单公式：<strong>Load < CPU核数 * 0.7</strong> (健康状态)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Concept Widget: Process Management -->
+                    <div class="concept-widget" id="concept-processes">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">⚙️</span>
+                                <span class="concept-title">了解核心概念：Linux 进程管理</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                在 Linux 中，<strong>进程 (Process)</strong> 是正在运行的程序实例。每个进程都有唯一的 <strong>PID (Process
+                                    ID)</strong>，并由内核调度执行。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">关键概念：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>前台进程</strong>：占用终端，阻塞用户输入</li>
+                                    <li><strong>后台进程</strong>：使用 <code>&</code> 符号在后台运行，不阻塞终端</li>
+                                    <li><strong>守护进程 (Daemon)</strong>：在后台持续运行的系统服务，如
+                                        <code>sshd</code>、<code>nginx</code>
+                                    </li>
+                                    <li><strong>父子进程</strong>：每个进程都有父进程 (PPID)，init/systemd 是所有进程的祖先 (PID=1)</li>
+                                    <li><strong>进程状态</strong>：R (运行)、S (休眠)、Z (僵尸)、T (停止)</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>常用组合：<code>ps aux</code> 查看所有进程，<code>ps -ef</code> 显示完整格式，<code>pstree</code>
+                                    查看进程树</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">ps</h3>
@@ -5272,6 +6570,39 @@
                             </div>
                         </div>
                     </article>
+                    <!-- Concept Widget: Process Signals -->
+                    <div class="concept-widget" id="concept-kill">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🛑</span>
+                                <span class="concept-title">了解核心概念：进程信号 (Signals)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                当你 "Kill" 一个进程时，实际上是向它发送了一个<strong>信号 (Signal)</strong>。进程收到信号后会做出相应的反应（结束、暂停、重载等）。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">常见信号：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>SIGTERM (15)</strong>：<strong>默认信号</strong>。请求进程正常停止（Graceful
+                                        Shutdown），进程可以保存数据后再退出。</li>
+                                    <li><strong>SIGKILL (9)</strong>：<strong>强制杀死</strong>。内核直接把进程干掉，进程无法拦截，可能导致数据丢失。
+                                    </li>
+                                    <li><strong>SIGINT (2)</strong>：相当于键盘按 <code>Ctrl+C</code>，中断前台进程。</li>
+                                    <li><strong>SIGHUP (1)</strong>：让后台进程重读配置文件（Reload）。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>原则：先礼后兵。先尝试 <code>kill PID</code> (TERM)，如果进程卡死无反应，再用 <code>kill -9 PID</code>
+                                    (KILL)。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">kill</h3>
@@ -5448,6 +6779,38 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: Background Jobs -->
+                    <div class="concept-widget" id="concept-jobs">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">👻</span>
+                                <span class="concept-title">了解核心概念：前台与后台任务</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux Shell 允许你同时运行多个任务。<strong>前台 (Foreground)</strong> 占用当前终端，<strong>后台
+                                    (Background)</strong> 在背后默默运行。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">控制符号：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>&</strong>：加在命令末尾，直接让命令在后台运行。如 <code>python server.py &</code>。</li>
+                                    <li><strong>Ctrl+Z</strong>：暂停当前前台任务，并放入后台（Stopped 状态）。</li>
+                                    <li><strong>bg</strong>：让暂停的后台任务继续运行 (Running)。</li>
+                                    <li><strong>fg</strong>：把后台任务拉回前台。</li>
+                                    <li><strong>nohup</strong>：让程序忽略 "挂断" (HUP) 信号，确保<strong>退出终端后程序不停止</strong>。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>组合技：<code>nohup Command &</code> 是服务器部署最常用的起手式，既后台运行，又防断线。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">nohup</h3>
@@ -5500,6 +6863,80 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Keyboard Shortcuts -->
+                    <div class="concept-widget" id="concept-shortcuts">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">⌨️</span>
+                                <span class="concept-title">了解核心概念：终端键盘侠 (Shortcuts)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                真正的 Linux 高手很少使用方向键。掌握这些快捷键，效率提升 10 倍。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+                                    光标移动与编辑：</h4>
+                                <table class="options-table">
+                                    <tr>
+                                        <td><strong>Ctrl + A</strong></td>
+                                        <td>跳到行首 (Start)</td>
+                                        <td><strong>Ctrl + E</strong></td>
+                                        <td>跳到行尾 (End)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ctrl + U</strong></td>
+                                        <td>清空至行首</td>
+                                        <td><strong>Ctrl + K</strong></td>
+                                        <td>清空至行尾</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ctrl + L</strong></td>
+                                        <td>清屏 (Clear)</td>
+                                        <td><strong>Ctrl + R</strong></td>
+                                        <td>搜索历史命令</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ctrl + C</strong></td>
+                                        <td>终止程序</td>
+                                        <td><strong>Ctrl + Z</strong></td>
+                                        <td>挂起程序 (后台)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">bash script</h3>
+                            <span class="command-badge">自动化</span>
+                        </div>
+                        <p class="command-description">Bash 脚本编程基础</p>
+
+                        <div class="examples-section">
+                            <h4 class="section-title">起手式模板</h4>
+                            <div class="code-block">
+                                <code><span class="comment">#!/bin/bash</span>
+<span class="comment"># 定义变量</span>
+NAME=<span class="string">"World"</span>
+echo <span class="string">"Hello, $NAME!"</span>
+
+<span class="comment"># 条件判断</span>
+if [ <span class="string">"$NAME"</span> == <span class="string">"World"</span> ]; then
+    echo <span class="string">"It works!"</span>
+fi
+
+<span class="comment"># 循环 (For Loop)</span>
+for i in {1..3}; do
+    echo <span class="string">"Count: $i"</span>
+done</code>
+                            </div>
+                        </div>
+                    </article>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">history</h3>
@@ -5580,6 +7017,37 @@
                             </div>
                         </div>
                     </article>
+
+                    <!-- Concept Widget: Environment Variables -->
+                    <div class="concept-widget" id="concept-env">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔧</span>
+                                <span class="concept-title">了解核心概念：环境变量 (Environment Variables)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                <strong>环境变量</strong> 是操作系统级的全局变量，用于影响进程的运行行为。它们通常由 Shell 传递给子进程，类似于程序的"全局配置"。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">常见变量：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>PATH</strong>：决定了 Shell 去哪里查找命令（输入命令时按此顺序搜索目录）。</li>
+                                    <li><strong>HOME</strong>：当前用户的主目录路径。</li>
+                                    <li><strong>USER</strong>：当前登录的用户名。</li>
+                                    <li><strong>SHELL</strong>：当前使用的 Shell 程序路径（如 /bin/bash）。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>命令辨析：<code>var=value</code> (仅当前 Shell 有效)，<code>export var=value</code> (当前 Shell
+                                    及子进程有效)。若要永久生效，需写入 <code>~/.bashrc</code> 或 <code>/etc/profile</code>。</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <article class="command-card">
                         <div class="command-header">
@@ -5672,6 +7140,43 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Package Management -->
+                    <div class="concept-widget" id="concept-packages">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📦</span>
+                                <span class="concept-title">了解核心概念：Linux 包管理系统</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                <strong>包管理器 (Package Manager)</strong> 是 Linux
+                                发行版用于自动化软件安装、更新、卸载的核心工具。它会自动处理依赖关系，确保软件正常运行。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">主流包管理器：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>APT
+                                            (Debian/Ubuntu)</strong>：<code>apt install</code>、<code>apt update</code>、<code>apt upgrade</code>
+                                    </li>
+                                    <li><strong>YUM/DNF
+                                            (RHEL/CentOS/Fedora)</strong>：<code>yum install</code>、<code>dnf install</code>
+                                    </li>
+                                    <li><strong>Pacman (Arch
+                                            Linux)</strong>：<code>pacman -S</code>、<code>pacman -Syu</code></li>
+                                    <li><strong>软件源 (Repository)</strong>：包管理器从官方/第三方软件源下载软件包</li>
+                                    <li><strong>依赖管理</strong>：自动安装所需的依赖库，避免"依赖地狱"</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>最佳实践：定期执行 <code>apt update && apt upgrade</code> 保持系统安全性和稳定性</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">apt</h3>
@@ -6233,6 +7738,93 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: SSH -->
+                    <div class="concept-widget" id="concept-ssh">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔑</span>
+                                <span class="concept-title">了解核心概念：SSH 安全远程连接</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                <strong>SSH (Secure Shell)</strong> 是一种加密的网络协议，用于在不安全的网络中安全地远程登录和执行命令。它取代了不安全的 Telnet 和
+                                rsh。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">核心特性：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>加密通信</strong>：所有数据（包括密码）都经过加密传输</li>
+                                    <li><strong>密钥认证</strong>：使用公钥/私钥对进行身份验证，比密码更安全</li>
+                                    <li><strong>端口转发</strong>：可以建立加密隧道，转发其他服务的流量</li>
+                                    <li><strong>文件传输</strong>：通过 <code>scp</code> 和 <code>sftp</code> 安全传输文件</li>
+                                    <li><strong>默认端口</strong>：22（可修改以提高安全性）</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>安全建议：禁用 root 登录，使用密钥认证，修改默认端口，启用防火墙</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concept Widget: SSH Key Auth -->
+                    <div class="concept-widget" id="concept-ssh-keys">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🗝️</span>
+                                <span class="concept-title">进阶：SSH 免密登录原理 (Key-based Auth)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                比密码更安全的登录方式。核心是<strong>非对称加密</strong>：你持有<strong>私钥 (Private
+                                    Key)</strong>（不可泄露），服务器持有<strong>公钥 (Public Key)</strong>。
+                            </p>
+                            <div style="margin-bottom: 1.0rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">配置三部曲：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li>1. <strong>生成密钥对</strong>：在本地电脑运行 <code>ssh-keygen</code>。</li>
+                                    <li>2. <strong>上传公钥</strong>：使用 <code>ssh-copy-id user@host</code> 将公钥部署到服务器。</li>
+                                    <li>3. <strong>免密登录</strong>：服务器验证你的私钥签名 -> 通过！</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">ssh-keygen / ssh-copy-id</h3>
+                            <span class="command-badge">密钥管理</span>
+                        </div>
+                        <p class="command-description">生成 SSH 密钥对并部署公钥到远程服务器</p>
+
+                        <div class="examples-section">
+                            <h4 class="section-title">实用示例</h4>
+                            <div class="example-item">
+                                <div class="example-label">1. 生成 Ed25519 密钥对（推荐，更安全快速）</div>
+                                <div class="code-block">
+                                    <code><span class="command">ssh-keygen</span> <span class="flag">-t</span> <span class="string">ed25519</span> <span class="flag">-C</span> <span class="string">"email@example.com"</span></code>
+                                </div>
+                                <div class="output-block"><code>Generating public/private ed25519 key pair...</code>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">2. 将公钥上传到服务器</div>
+                                <div class="code-block">
+                                    <code><span class="command">ssh-copy-id</span> <span class="path">user@192.168.1.100</span></code>
+                                </div>
+                                <div class="output-block">
+                                    <code>Number of key(s) added: 1<br>Now try logging into the machine, with:   "ssh 'user@192.168.1.100'"</code>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">ssh</h3>
@@ -6506,6 +8098,41 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: Networking -->
+                    <div class="concept-widget" id="concept-network">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🌐</span>
+                                <span class="concept-title">了解核心概念：Linux 网络基础</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 网络管理涉及接口 (Interface)、IP 地址、路由表等核心组件。现代 Linux 发行版推荐使用 <code>iproute2</code> 工具集 (如
+                                <code>ip</code> 命令) 替代老旧的 `net-tools` (如 <code>ifconfig</code>)。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">关键术语：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>网络接口 (Interface)</strong>：物理或虚拟的网卡设备，如 <code>eth0</code> (以太网),
+                                        <code>wlan0</code> (无线), <code>lo</code> (本地回环)
+                                    </li>
+                                    <li><strong>IP 地址/子网掩码 (CIDR)</strong>：如 <code>192.168.1.10/24</code>，其中 /24 代表子网掩码
+                                        255.255.255.0</li>
+                                    <li><strong>网关 (Gateway)</strong>：流量通往外部网络（如互联网）的出口 IP</li>
+                                    <li><strong>DNS</strong>：域名解析服务，配置于 <code>/etc/resolv.conf</code></li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>提示：<code>ip</code> 命令功能极其强大，一个命令即可实现 <code>ifconfig</code>, <code>route</code>,
+                                    <code>arp</code> 的所有功能。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">ip</h3>
@@ -6572,6 +8199,99 @@
                             <span class="command-badge">诊断</span>
                         </div>
                         <p class="command-description">追踪数据包到目标主机的路由路径</p>
+                    </article>
+
+                    <!-- Concept Widget: Common Ports -->
+                    <div class="concept-widget" id="concept-ports">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔌</span>
+                                <span class="concept-title">了解核心概念：常见端口与协议</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                端口号用于区分不同的网络服务。0-1023 为系统保留端口（需 root 权限），1024-49151 为注册端口，49152+ 为动态端口。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+                                    常用服务端口速查：
+                                </h4>
+                                <div class="options-section" style="margin-top: 0;">
+                                    <table class="options-table">
+                                        <tr>
+                                            <td style="width: 80px;"><strong>21</strong></td>
+                                            <td>FTP (文件传输)</td>
+                                            <td style="width: 80px;"><strong>22</strong></td>
+                                            <td>SSH (安全登录)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>23</strong></td>
+                                            <td>Telnet (不安全)</td>
+                                            <td><strong>25</strong></td>
+                                            <td>SMTP (邮件发送)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>53</strong></td>
+                                            <td>DNS (域名解析)</td>
+                                            <td><strong>80</strong></td>
+                                            <td>HTTP (网页)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>443</strong></td>
+                                            <td>HTTPS (加密网页)</td>
+                                            <td><strong>3306</strong></td>
+                                            <td>MySQL 数据库</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>6379</strong></td>
+                                            <td>Redis 缓存</td>
+                                            <td><strong>8080</strong></td>
+                                            <td>常见 Web 代理/Tomcat</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">tcpdump</h3>
+                            <span class="command-badge">抓包</span>
+                        </div>
+                        <p class="command-description">强大的命令行网络抓包分析工具</p>
+
+                        <div class="usage-block">
+                            <span class="usage-label">Usage:</span>
+                            <code><span class="syntax-cmd">tcpdump</span> <span class="syntax-arg">[options] [filter]</span></code>
+                        </div>
+
+                        <div class="examples-section">
+                            <h4 class="section-title">实用示例</h4>
+                            <div class="example-item">
+                                <div class="example-label">抓取 eth0 接口的所有数据包</div>
+                                <div class="code-block">
+                                    <code><span class="command">tcpdump</span> <span class="flag">-i</span> <span class="string">eth0</span></code>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">抓取特定端口的流量并显示内容</div>
+                                <div class="code-block">
+                                    <code><span class="command">tcpdump</span> <span class="flag">-nn</span> <span class="flag">-A</span> port <span class="highlight">80</span></code>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">保存抓包结果到文件（供 Wireshark 分析）</div>
+                                <div class="code-block">
+                                    <code><span class="command">tcpdump</span> <span class="flag">-w</span> capture.pcap</code>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="command-card">
 
                         <div class="options-section">
                             <h4 class="section-title">常用选项</h4>
@@ -6743,6 +8463,39 @@
                     </article>
 
                     <!-- netstat card -->
+                    <!-- Concept Widget: Network Ports -->
+                    <div class="concept-widget" id="concept-ports">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔌</span>
+                                <span class="concept-title">了解核心概念：网络端口 (Ports)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                如果 IP 地址是房子的地址，那么<strong>端口 (Port)</strong> 就是房子的门。每个网络服务都需要监听一个特定的端口来接收请求。端口范围是
+                                0-65535。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">常见端口号：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>SSH</strong>: 22</li>
+                                    <li><strong>HTTP / HTTPS</strong>: 80 / 443</li>
+                                    <li><strong>MySQL</strong>: 3306</li>
+                                    <li><strong>Redis</strong>: 6379</li>
+                                    <li><strong>DNS</strong>: 53 (UDP)</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>安全提示：使用 <code>netstat -tulpn</code> 或 <code>ss -lntp</code>
+                                    查看哪些端口正在被哪些进程监听，关闭不必要的端口是服务器加固的第一步。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">netstat</h3>
@@ -6808,6 +8561,63 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Archiving vs Compression -->
+                    <div class="concept-widget" id="concept-tar">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🗜️</span>
+                                <span class="concept-title">了解核心概念：归档 (Archiving) 与压缩 (Compression)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                初学者常混淆这两个概念。<strong>归档 (tar)</strong> 是将多个文件/目录打包成一个文件（不减少体积）；<strong>压缩
+                                    (gzip/bzip2)</strong> 是通过算法减小文件体积。Linux 通常将两者结合使用。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">常见扩展名：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>.tar</strong>：仅归档，无压缩（原汁原味）</li>
+                                    <li><strong>.tar.gz / .tgz</strong>：使用 gzip 压缩（速度快，兼容性好，最常用）</li>
+                                    <li><strong>.tar.bz2</strong>：使用 bzip2 压缩（体积更小，但速度稍慢）</li>
+                                    <li><strong>.tar.xz</strong>：使用 xz 压缩（压缩率极高，压缩/解压最慢）</li>
+                                </ul>
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">Tar
+                                    参数速查口诀：
+                                </h4>
+                                <table class="options-table">
+                                    <tr>
+                                        <td style="width: 40px;"><strong>c</strong></td>
+                                        <td>Create (创建包)</td>
+                                        <td style="width: 40px;"><strong>x</strong></td>
+                                        <td>eXtract (解压包)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>z</strong></td>
+                                        <td>gZip (压缩)</td>
+                                        <td><strong>v</strong></td>
+                                        <td>Verbose (显示过程)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>f</strong></td>
+                                        <td>File (指定文件名，必须在最后)</td>
+                                        <td><strong>-C</strong></td>
+                                        <td>Change directory (解压到指定目录)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>万能公式：<br>打包用 <code>tar czvf</code> (Create Zipped Verbose File)<br>解压用
+                                    <code>tar xzvf</code> (Xtract Zipped Verbose File)</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">tar</h3>
@@ -7253,6 +9063,129 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Power Management -->
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">shutdown / reboot</h3>
+                            <span class="command-badge">基础</span>
+                        </div>
+                        <p class="command-description">系统关机与重启管理</p>
+                        <div class="usage-block">
+                            <span class="usage-label">Usage:</span>
+                            <code><span class="syntax-cmd">shutdown</span> <span class="syntax-arg">[options] [time] [message]</span></code>
+                        </div>
+                        <div class="examples-section">
+                            <h4 class="section-title">实用示例</h4>
+                            <div class="example-item">
+                                <div class="example-label">立即关机</div>
+                                <div class="code-block">
+                                    <code><span class="command">shutdown</span> <span class="flag">-h now</span></code>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">立即重启</div>
+                                <div class="code-block"><code><span class="command">reboot</span></code> （或
+                                    <code>shutdown -r now</code>）
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">10分钟后关机</div>
+                                <div class="code-block">
+                                    <code><span class="command">shutdown</span> <span class="flag">+10</span> "System maintenance"</code>
+                                </div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">取消计划的关机</div>
+                                <div class="code-block">
+                                    <code><span class="command">shutdown</span> <span class="flag">-c</span></code>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">init / runlevel</h3>
+                            <span class="command-badge">底层</span>
+                        </div>
+                        <p class="command-description">切换系统运行级别 (Runlevel) 或初始化状态</p>
+                        <div class="options-section">
+                            <h4 class="section-title">常见运行级别</h4>
+                            <table class="options-table">
+                                <tr>
+                                    <td>0</td>
+                                    <td>关机 (Poweroff)</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>单用户模式 (Rescue)</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>多用户文本模式 (Server)</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>图形界面模式 (GUI)</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>重启 (Reboot)</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="examples-section">
+                            <h4 class="section-title">实用示例</h4>
+                            <div class="example-item">
+                                <div class="example-label">查看当前运行级别</div>
+                                <div class="code-block"><code><span class="command">runlevel</span></code> （或
+                                    <code>who -r</code>）
+                                </div>
+                                <div class="output-block"><code>N 5</code> （N=无上一次级别，5=当前级别）</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-label">切换到单用户模式（维护用）</div>
+                                <div class="code-block">
+                                    <code><span class="command">init</span> <span class="string">1</span></code>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Concept Widget: Systemd -->
+                    <div class="concept-widget" id="concept-systemd">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">⚙️</span>
+                                <span class="concept-title">了解核心概念：Systemd 系统服务管理</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Systemd 是 Linux 的初始化系统 (PID 1)，通过 Unit (单元) 管理资源。最常用的是 <code>.service</code>。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">服务生命周期
+                                    (Lifecycle)：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>start / stop</strong>：控制当前运行状态（立刻生效，重启失效）。</li>
+                                    <li><strong>enable / disable</strong>：控制开机自启状态（下次开机生效）。</li>
+                                    <li><strong>reload</strong>：平滑重载配置文件（不中断服务）。</li>
+                                    <li><strong>daemon-reload</strong>：修改 <code>.service</code> 文件后必须执行，刷新 Systemd 缓存。
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">📂</i>
+                                <span>配置文件路径：<br>
+                                    系统级（默认）：<code>/lib/systemd/system/</code><br>
+                                    用户级（自定义）：<code>/etc/systemd/system/</code> (优先级更高，建议在此管理)</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">systemctl</h3>
@@ -7405,6 +9338,85 @@
                         </div>
                     </article>
 
+                    <!-- Concept Widget: Log Map -->
+                    <div class="concept-widget" id="concept-log-map">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🗺️</span>
+                                <span class="concept-title">了解核心概念：系统日志文件地图</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 系统如果不使用 systemd-journald，或者为了查阅持久化日志，通常会查看 <code>/var/log</code> 目录下的文本文件。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">关键日志定位：
+                                </h4>
+                                <table class="options-table">
+                                    <tr>
+                                        <td><strong>/var/log/syslog</strong></td>
+                                        <td>(或 messages) 系统通用日志，包含大部分信息</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>/var/log/auth.log</strong></td>
+                                        <td>(或 secure) 认证安全日志 (sudo, ssh 登录记录)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>/var/log/kern.log</strong></td>
+                                        <td>内核产生的日志 (硬件驱动、磁盘错误等)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>/var/log/dmesg</strong></td>
+                                        <td>系统启动时的内核环形缓冲区信息</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>/var/log/nginx/</strong></td>
+                                        <td>第三方服务日志通常有独立目录</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>技巧：日志文件通常很大，不要用 cat。使用 <code>tail -f</code> 实时监控，或 <code>less</code> 翻页查看，或
+                                    <code>grep</code> 搜索关键词。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concept Widget: Systemd Journal -->
+                    <div class="concept-widget" id="concept-journal">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">📜</span>
+                                <span class="concept-title">了解核心概念：Systemd 日志系统 (Journal)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                传统 Linux 日志分散在 <code>/var/log</code> 下的文本文件中（如 syslog, auth.log）。而
+                                <strong>systemd-journald</strong> 引入了统一的、结构化的二进制日志系统。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">Journal
+                                    的优势：</h4>
+                                <ul class="concept-list">
+                                    <li><strong>查询能力</strong>：可以精确地按时间段、服务名 (unit)、优先级 (priority) 等多维度筛选。</li>
+                                    <li><strong>结构化数据</strong>：不仅记录文本消息，还记录了元数据（如 UID, PID, EXE 路径）。</li>
+                                    <li><strong>防篡改</strong>：二进制格式使得日志更难被简单篡改。</li>
+                                    <li><strong>持久化</strong>：默认保存于 <code>/run/log/journal</code> (重启丢失)，可配置保存到磁盘。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>对比：<code>tail /var/log/syslog</code> 是看"现在发生了什么"，而
+                                    <code>journalctl -u nginx --since "1 hour ago"</code> 是精准的"事后取证"。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">journalctl</h3>
@@ -7490,6 +9502,42 @@
                             </div>
                         </div>
                     </article>
+
+                    <!-- Concept Widget: Cron -->
+                    <div class="concept-widget" id="concept-cron">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">⏰</span>
+                                <span class="concept-title">了解核心概念：Cron 定时任务调度</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                <strong>Cron</strong> 是 Linux 系统中的时间驱动任务调度器，可以在指定的时间自动执行脚本或命令。它是系统自动化运维的核心工具。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">Cron
+                                    表达式格式：</h4>
+                                <div
+                                    style="background: rgba(15, 23, 42, 0.5); padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem;">
+                                    <code
+                                        style="color: var(--accent-cyan); font-size: 0.85rem;">分钟(0-59) 小时(0-23) 日期(1-31) 月份(1-12) 星期(0-7)</code>
+                                </div>
+                                <ul class="concept-list">
+                                    <li><code>* * * * *</code> - 每分钟执行一次</li>
+                                    <li><code>0 2 * * *</code> - 每天凌晨 2 点执行</li>
+                                    <li><code>*/5 * * * *</code> - 每 5 分钟执行一次</li>
+                                    <li><code>0 0 * * 0</code> - 每周日午夜执行</li>
+                                    <li><code>0 9-17 * * 1-5</code> - 工作日 9-17 点每小时执行</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>常见用途：自动备份、日志清理、系统监控、定时爬虫、报表生成</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <article class="command-card">
                         <div class="command-header">
@@ -7696,6 +9744,73 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Standard Streams -->
+                    <div class="concept-widget" id="concept-streams">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🌊</span>
+                                <span class="concept-title">了解核心概念：标准流 (Standard Streams)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux 每个进程启动时都会打开三个文件描述符 (File Descriptors)。理解它们是掌握重定向的基础。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">三大标准流：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>STDIN (0)</strong>：标准输入。程序从这里读取数据（默认是键盘）。</li>
+                                    <li><strong>STDOUT (1)</strong>：标准输出。程序将正常结果打印到这里（默认是屏幕）。</li>
+                                    <li><strong>STDERR (2)</strong>：标准错误。程序将错误信息打印到这里（默认也是屏幕，但独立于 STDOUT）。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>常见困惑：为什么 <code>> log.txt</code> 抓不到错误？因为 <code>></code> 默认只重定向 STDOUT (1)。想要全抓，得用
+                                    <code>&> log.txt</code> 或 <code>> log.txt 2>&1</code> (把 2 合并到 1)。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concept Widget: I/O Redirection -->
+                    <div class="concept-widget" id="concept-io">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔄</span>
+                                <span class="concept-title">了解核心概念：输入输出重定向与管道</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Linux Shell 的强大之处在于可以将命令组合使用。每个进程都有三个标准流：<strong>标准输入 (stdin, 0)</strong>、<strong>标准输出
+                                    (stdout, 1)</strong> 和 <strong>标准错误 (stderr, 2)</strong>。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">核心符号：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><code>></code>：<strong>覆盖重定向</strong>。将 stdout 保存到文件（文件原内容被清空）。如
+                                        <code>echo "hi" > file</code>。
+                                    </li>
+                                    <li><code>>></code>：<strong>追加重定向</strong>。将 stdout 追加到文件末尾。如
+                                        <code>echo "logs" >> app.log</code>。
+                                    </li>
+                                    <li><code>|</code> (管道)：将一个命令的 stdout 传递给下一个命令作为 stdin。如
+                                        <code>ls | grep "log"</code>。
+                                    </li>
+                                    <li><code>2></code>：只重定向错误输出。如 <code>cmd 2> error.log</code>。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>常见技巧：<code>cmd > /dev/null 2>&1</code> —— 将所有输出（标准+错误）都丢弃（静默执行）。</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">管道 |</h3>
@@ -8231,6 +10346,38 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Vim Modes -->
+                    <div class="concept-widget" id="concept-vim">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">⌨️</span>
+                                <span class="concept-title">了解核心概念：Vim 的模态编辑</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Vim 与普通编辑器最大的不同在于<strong>模态 (Modes)</strong>。你必须切换到正确的模式才能执行输入、保存或移动操作。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">核心模式循环：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>普通模式 (Normal Mode)</strong>：默认模式。按 <code>Esc</code>
+                                        进入。只能移动光标、复制粘贴，不能直接打字。</li>
+                                    <li><strong>插入模式 (Insert Mode)</strong>：按 <code>i</code> 进入。可以像记事本一样正常打字。</li>
+                                    <li><strong>命令模式 (Command Mode)</strong>：在普通模式按 <code>:</code> 进入。用于保存 (w)、退出 (q) 等。
+                                    </li>
+                                    <li><strong>可视模式 (Visual Mode)</strong>：按 <code>v</code> 进入。用于选中文本块。</li>
+                                </ul>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>新手死循环：进去了出不来？按 <code>Esc</code> 确保回普通模式，然后输 <code>:wq</code> (保存退出) 或
+                                    <code>:q!</code> (强制不保存退出)。</span>
+                            </div>
+                        </div>
+                    </div>
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">模式切换</h3>
@@ -8775,6 +10922,59 @@
                 </div>
 
                 <div class="commands-grid">
+                    <!-- Concept Widget: Version Control -->
+                    <div class="concept-widget" id="concept-git">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🌳</span>
+                                <span class="concept-title">了解核心概念：Git 分布式版本控制</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                Git 的核心在于理解<strong>文件的三种状态</strong>以及它们在不用区域间的流转。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+                                    文件状态流转图 (Traffic Light)：</h4>
+                                <table class="options-table">
+                                    <tr>
+                                        <td style="color: #ff5f56;">🔴 Untracked / Modified</td>
+                                        <td><strong>工作区</strong> (Working Dir)<br><span
+                                                style="opacity:0.7; font-size:0.85em;">你正在写代码的地方</span></td>
+                                        <td><code>git add</code> ⬇️</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #ffbd2e;">🟡 Staged</td>
+                                        <td><strong>暂存区</strong> (Index)<br><span
+                                                style="opacity:0.7; font-size:0.85em;">准备提交的快照</span></td>
+                                        <td><code>git commit</code> ⬇️</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #27c93f;">🟢 Committed</td>
+                                        <td><strong>本地仓库</strong> (Local Repo)<br><span
+                                                style="opacity:0.7; font-size:0.85em;">版本历史已保存</span></td>
+                                        <td><code>git push</code> ⬇️</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #007aff;">🔵 Pushed</td>
+                                        <td><strong>远程仓库</strong> (Remote Repo)<br><span
+                                                style="opacity:0.7; font-size:0.85em;">GitHub / GitLab</span></td>
+                                        <td>✅ 安全!</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>反悔操作：<br>
+                                    🟢 -> 🟡 : <code>git reset --soft HEAD^</code><br>
+                                    🟡 -> 🔴 : <code>git reset HEAD &lt;file&gt;</code><br>
+                                    🔴 -> 🗑️ : <code>git checkout -- &lt;file&gt;</code> (危险！丢弃修改)</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <article class="command-card">
                         <div class="command-header">
                             <h3 class="command-name">git</h3>
@@ -8837,6 +11037,162 @@
                             </div>
                         </div>
                     </article>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">git branch / merge</h3>
+                            <span class="command-badge">分支管理</span>
+                        </div>
+                        <p class="command-description">管理代码分支，并行开发的核心</p>
+
+                        <div class="options-section">
+                            <h4 class="section-title">常用操作</h4>
+                            <table class="options-table">
+                                <tr>
+                                    <td>branch</td>
+                                    <td>列出本地分支</td>
+                                </tr>
+                                <tr>
+                                    <td>branch -a</td>
+                                    <td>列出所有分支（含远程）</td>
+                                </tr>
+                                <tr>
+                                    <td>checkout -b &lt;name&gt;</td>
+                                    <td>创建并切换到新分支</td>
+                                </tr>
+                                <tr>
+                                    <td>switch &lt;name&gt;</td>
+                                    <td>切换分支（新版推荐）</td>
+                                </tr>
+                                <tr>
+                                    <td>merge &lt;branch&gt;</td>
+                                    <td>合并指定分支到当前分支</td>
+                                </tr>
+                                <tr>
+                                    <td>branch -d &lt;name&gt;</td>
+                                    <td>删除分支</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </article>
+
+                    <!-- Concept Widget: Merge vs Rebase -->
+                    <div class="concept-widget" id="concept-git-strategy">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🔀</span>
+                                <span class="concept-title">进阶：Merge (合并) vs Rebase (变基)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                两者都用于合并代码，但对提交历史的影响完全不同。
+                            </p>
+                            <ul class="concept-list">
+                                <li><strong>Git Merge</strong>：保留真实的历史轨迹。
+                                    <br><span style="color:#666;font-size:0.9em;">✔️ 优点：可追溯，非破坏性。<br>❌ 缺点：历史线复杂，出现多次
+                                        Merge Commit。</span>
+                                </li>
+                                <li><strong>Git Rebase</strong>：重写历史，将提交移到目标分支最前端。
+                                    <br><span style="color:#666;font-size:0.9em;">✔️ 优点：历史线是一条直线，极度整洁。<br>❌ 缺点：修改了历史
+                                        Commmit ID，<strong>严禁在公共共享分支使用！</strong></span>
+                                </li>
+                            </ul>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>建议：个人开发分支拉取主干更新时用 <code>rebase master</code> 保持整洁；合并回主干时用
+                                    <code>merge --no-ff</code> 保留记录。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">git undo / stash</h3>
+                            <span class="command-badge">后悔药</span>
+                        </div>
+                        <p class="command-description">撤销修改与临时暂存</p>
+
+                        <div class="options-section">
+                            <h4 class="section-title">救命命令</h4>
+                            <table class="options-table">
+                                <tr>
+                                    <td>stash</td>
+                                    <td>暂存当前修改（清空工作区）</td>
+                                </tr>
+                                <tr>
+                                    <td>stash pop</td>
+                                    <td>恢复暂存的修改</td>
+                                </tr>
+                                <tr>
+                                    <td>reset --soft HEAD^</td>
+                                    <td>撤销最近一次 commit (保留代码)</td>
+                                </tr>
+                                <tr>
+                                    <td>reset --hard HEAD^</td>
+                                    <td>撤销 commit 并丢弃代码 (<strong>危险!</strong>)</td>
+                                </tr>
+                                <tr>
+                                    <td>start &lt;commit&gt;</td>
+                                    <td>(Alias) 回到指定版本</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="examples-section">
+                            <h4 class="section-title">典型场景：写错分支了？</h4>
+                            <div class="code-block">
+                                <code><span class="comment"># 1. 还没提交？先存起来</span>
+<span class="command">git</span> stash
+<span class="comment"># 2. 切换到对的分支</span>
+<span class="command">git</span> switch dev
+<span class="comment"># 3. 拿回来继续写</span>
+<span class="command">git</span> stash pop</code>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Concept Widget: Containerization -->
+                    <div class="concept-widget" id="concept-docker">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🐳</span>
+                                <span class="concept-title">了解核心概念：容器化 (Containerization)</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                <strong>容器 (Container)</strong> 是一种轻量级的虚拟化技术。核心流程是：构建镜像 -> 运行容器。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+                                    Docker 生命周期 (Lifecycle)：</h4>
+                                <table class="options-table">
+                                    <tr>
+                                        <td><strong>Dockerfile</strong></td>
+                                        <td>📄 源代码/说明书</td>
+                                        <td><code>docker build</code> ⬇️</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Image (镜像)</strong></td>
+                                        <td>📀 只读模板 (类比 ISO)</td>
+                                        <td><code>docker run</code> ⬇️</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Container (容器)</strong></td>
+                                        <td>🏃‍ 运行实例 (类比 进程)</td>
+                                        <td><code>docker stop</code> ⏹️</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="alert-box alert-tip">
+                                <i class="alert-icon">💡</i>
+                                <span>优势：<strong>"Build Once, Run
+                                        Anywhere"</strong>。开发环境与生产环境高度一致，极大减少了"在我机器上能跑"的问题。</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <article class="command-card">
                         <div class="command-header">
@@ -8957,17 +11313,193 @@
                 </div>
             </section>
 
-            <!-- 页面底部 -->
-            <footer class="page-footer">
-                <div class="footer-logo">Linux 命令速查</div>
-                <p class="footer-text">© 2026 Linux 命令速查 | 为开发者打造的现代化技术文档，提升您的工作效率。</p>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">关于我们</a>
-                    <a href="#" class="footer-link">使用指南</a>
-                    <a href="#" class="footer-link">反馈建议</a>
-                    <a href="#" class="footer-link">GitHub</a>
+            <!-- ============ Database ============ -->
+            <section id="database" class="category-section">
+                <div class="category-header">
+                    <span class="category-icon">💾</span>
+                    <div class="category-info">
+                        <h2>Databases</h2>
+                        <p>常用数据库操作与维护</p>
+                    </div>
                 </div>
-            </footer>
+
+                <div class="commands-grid">
+                    <!-- Concept Widget: SQL vs NoSQL -->
+                    <div class="concept-widget" id="concept-db">
+                        <div class="concept-header" onclick="toggleConcept(this)">
+                            <div class="concept-title-group">
+                                <span class="concept-icon">🗄️</span>
+                                <span class="concept-title">了解核心概念：RDBMS vs NoSQL</span>
+                            </div>
+                            <span class="concept-arrow">▼</span>
+                        </div>
+                        <div class="concept-content">
+                            <p class="concept-text">
+                                理解关系型数据库与非关系型数据库的区别，有助于选择合适的技术栈。
+                            </p>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">技术对比：
+                                </h4>
+                                <ul class="concept-list">
+                                    <li><strong>SQL (MySQL/PostgreSQL)</strong>：结构化数据，支持复杂查询 (JOIN) 和事务
+                                        (ACID)。适用于核心业务数据。</li>
+                                    <li><strong>NoSQL (Redis/MongoDB)</strong>：非结构化/键值对，高性能，扩展性强。适用于缓存、会话管理、实时分析。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">mysql / psql</h3>
+                            <span class="command-badge">SQL</span>
+                        </div>
+                        <p class="command-description">关系型数据库客户端工具</p>
+
+                        <div class="options-section">
+                            <h4 class="section-title">常用操作 (MySQL)</h4>
+                            <table class="options-table">
+                                <tr>
+                                    <td>mysql -u user -p</td>
+                                    <td>连接数据库</td>
+                                </tr>
+                                <tr>
+                                    <td>show databases;</td>
+                                    <td>显示所有库</td>
+                                </tr>
+                                <tr>
+                                    <td>use &lt;db&gt;;</td>
+                                    <td>切换数据库</td>
+                                </tr>
+                                <tr>
+                                    <td>source file.sql;</td>
+                                    <td>导入 SQL 文件</td>
+                                </tr>
+                                <tr>
+                                    <td>mysqldump</td>
+                                    <td>备份数据库 (CLI 命令)</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="examples-section">
+                            <h4 class="section-title">备份与还原</h4>
+                            <div class="code-block">
+                                <code><span class="comment"># 备份 (Dump)</span>
+<span class="command">mysqldump</span> -u root -p mydb > backup.sql
+
+<span class="comment"># 还原 (Import)</span>
+<span class="command">mysql</span> -u root -p mydb < backup.sql</code>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">redis-cli</h3>
+                            <span class="command-badge">NoSQL</span>
+                        </div>
+                        <p class="command-description">Redis 命令行工具，用于缓存调试</p>
+
+                        <div class="options-section">
+                            <h4 class="section-title">常用指令</h4>
+                            <table class="options-table">
+                                <tr>
+                                    <td>ping</td>
+                                    <td>测试连接 (PONG)</td>
+                                </tr>
+                                <tr>
+                                    <td>set key val</td>
+                                    <td>设置键值</td>
+                                </tr>
+                                <tr>
+                                    <td>get key</td>
+                                    <td>获取键值</td>
+                                </tr>
+                                <tr>
+                                    <td>keys *</td>
+                                    <td>列出所有键 (慎用!)</td>
+                                </tr>
+                                <tr>
+                                    <td>flushall</td>
+                                    <td>清空所有数据 (<strong>危险!</strong>)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ============ Security ============ -->
+            <section id="security" class="category-section">
+                <div class="category-header">
+                    <span class="category-icon">🛡️</span>
+                    <div class="category-info">
+                        <h2>Security</h2>
+                        <p>防火墙与系统安全配置</p>
+                    </div>
+                </div>
+
+                <div class="commands-grid">
+                    <article class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-name">ufw</h3>
+                            <span class="command-badge">防火墙</span>
+                        </div>
+                        <p class="command-description">简单防火墙 (Uncomplicated Firewall)，Ubuntu 默认工具</p>
+
+                        <div class="usage-block">
+                            <span class="usage-label">Usage:</span>
+                            <code><span class="syntax-cmd">sudo ufw</span> <span class="syntax-arg">command</span></code>
+                        </div>
+
+                        <div class="options-section">
+                            <h4 class="section-title">常用配置</h4>
+                            <table class="options-table">
+                                <tr>
+                                    <td>status</td>
+                                    <td>查看状态</td>
+                                </tr>
+                                <tr>
+                                    <td>enable / disable</td>
+                                    <td>开启 / 关闭 防火墙</td>
+                                </tr>
+                                <tr>
+                                    <td>allow &lt;port&gt;</td>
+                                    <td>开放端口 (如 80/tcp)</td>
+                                </tr>
+                                <tr>
+                                    <td>deny &lt;port&gt;</td>
+                                    <td>拒绝端口</td>
+                                </tr>
+                                <tr>
+                                    <td>delete allow &lt;port&gt;</td>
+                                    <td>删除规则</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="examples-section">
+                            <h4 class="section-title">典型配置流程</h4>
+                            <div class="code-block">
+                                <code><span class="comment"># 1. 默认拒绝所有进入，允许所有流出 (基准)</span>
+<span class="command">sudo ufw</span> default deny incoming
+<span class="command">sudo ufw</span> default allow outgoing
+
+<span class="comment"># 2. 必须先放行 SSH (否则会把自己关在门外!)</span>
+<span class="command">sudo ufw</span> allow ssh  <span class="comment"># 或 allow 22</span>
+
+<span class="comment"># 3. 开放 Web 服务</span>
+<span class="command">sudo ufw</span> allow 80/tcp
+<span class="command">sudo ufw</span> allow 443/tcp
+
+<span class="comment"># 4. 启用防火墙</span>
+<span class="command">sudo ufw</span> enable</code>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+
         </main>
     </div>
 
@@ -9244,6 +11776,19 @@
         });
 
         // 2. 按钮涟漪效果 (Ripple Effect)
+        function toggleConcept(header) {
+            const widget = header.parentElement;
+            widget.classList.toggle('expanded');
+        }
+
+        // Toggle Knowledge Card expansion
+        function toggleKnowledgeCard(card) {
+            card.classList.toggle('expanded');
+
+            // Prevent event bubbling to parent elements
+            event.stopPropagation();
+        }
+
         function createRipple(event) {
             const button = event.currentTarget;
             const ripple = document.createElement('span');
@@ -9372,9 +11917,12 @@
                 const cards = targetSection.querySelectorAll('.command-card');
                 cards.forEach(card => {
                     if (filterCommand) {
-                        const cmdName = card.querySelector('.command-name').textContent.trim();
+                        const cmdNameRaw = card.querySelector('.command-name').textContent.trim();
+                        // 支持组合指令（如 "shutdown / reboot"），通过 "/" 分割匹配
+                        const cmdNames = cmdNameRaw.split('/').map(s => s.trim());
+
                         // 过滤显示
-                        if (cmdName === filterCommand) {
+                        if (cmdNames.includes(filterCommand) || cmdNameRaw === filterCommand) {
                             card.style.display = 'block';
                             card.style.animation = 'fadeSlideIn 0.3s ease-out';
                         } else {
