@@ -11,6 +11,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
+
+
     <style>
         /* ==================== CSS 变量系统 ==================== */
         :root {
@@ -57,6 +59,13 @@
             --noise-opacity: 0.03;
             --animation-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* 🎛️ 用户可调控变量 */
+            --user-font-size: 16px;
+            --user-card-opacity: 0.8;
+            --user-blur-intensity: 20px;
+            --user-animation-duration: 0.3s;
+            --user-code-width: 100%;
         }
 
         /* 浅色主题 (专业学术/打印风格) */
@@ -87,9 +96,55 @@
             --border-strong: #94a3b8;
 
             /* 强调色调深，符合浅色背景 */
-            --accent-cyan: #0284c7;
-            --accent-blue: #2563eb;
             --accent-purple: #7c3aed;
+        }
+
+        /* 🎨 Theme Presets (Phase 8) */
+
+        /* Cyberpunk Theme */
+        [data-theme-preset="cyberpunk"] {
+            --bg-primary: #050505;
+            --bg-secondary: #000000;
+            --bg-tertiary: #121212;
+            --bg-card: rgba(18, 18, 18, 0.9);
+            --bg-card-hover: rgba(255, 255, 0, 0.1);
+            --text-primary: #fcee0a;
+            /* Yellow */
+            --text-secondary: #00ff00;
+            /* Green */
+            --border-medium: #fcee0a;
+            --accent-cyan: #00ff00;
+            --accent-blue: #00e5ff;
+            --accent-purple: #d500f9;
+            --gradient-hero: linear-gradient(135deg, #fcee0a 0%, #ff00ff 100%);
+            --shadow-glow: 0 0 20px rgba(252, 238, 10, 0.3);
+        }
+
+        /* Ubuntu Theme */
+        [data-theme-preset="ubuntu"] {
+            --bg-primary: #300a24;
+            --bg-secondary: #2c001e;
+            --bg-tertiary: #451537;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #aea79f;
+            --accent-cyan: #e95420;
+            /* Orange */
+            --gradient-hero: linear-gradient(135deg, #e95420 0%, #77216f 100%);
+        }
+
+        /* Dracula Theme */
+        [data-theme-preset="dracula"] {
+            --bg-primary: #282a36;
+            --bg-secondary: #21222c;
+            --bg-tertiary: #44475a;
+            --bg-card: rgba(68, 71, 90, 0.6);
+            --bg-card-hover: rgba(68, 71, 90, 0.9);
+            --text-primary: #f8f8f2;
+            --text-secondary: #bd93f9;
+            --accent-cyan: #8be9fd;
+            --gradient-hero: linear-gradient(135deg, #bd93f9 0%, #ff79c6 100%);
         }
 
         /* 浅色模式下的特殊覆盖 */
@@ -168,6 +223,114 @@
             color: var(--text-primary);
             line-height: 1.7;
             overflow-x: hidden;
+            /* Typography Optimization */
+            letter-spacing: -0.01em;
+        }
+
+        /* ==================== 💅 Visual Polish (Phase 9) ==================== */
+
+        /* 1. Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 211, 238, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 211, 238, 0.6);
+        }
+
+        /* Light mode scrollbar */
+        [data-theme="light"] ::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.8);
+        }
+
+        [data-theme="light"] ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.5);
+        }
+
+        [data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.8);
+        }
+
+        /* 2. Selection Highlight */
+        ::selection {
+            background: rgba(34, 211, 238, 0.3);
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+        }
+
+        [data-theme="light"] ::selection {
+            background: rgba(3, 105, 161, 0.2);
+            color: #0369a1;
+            text-shadow: none;
+        }
+
+        /* 3. Loading Overlay */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(34, 211, 238, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-cyan);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        body.loaded #loader {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* 4. Footer */
+        .main-footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--border-medium);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
         }
 
         /* 动态背景 */
@@ -210,6 +373,129 @@
             }
         }
 
+        /* ⭐ Command Favoriting */
+        .star-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            z-index: 2;
+            transform: scale(0.8);
+        }
+
+        .command-card:hover .star-btn,
+        .command-card.favorited .star-btn,
+        .star-btn:focus {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .star-btn:hover {
+            transform: scale(1.2) rotate(15deg);
+            color: var(--accent-orange);
+        }
+
+        .command-card.favorited .star-btn {
+            color: #fbbf24;
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+        }
+
+        .star-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* 🧭 Onboarding Tour */
+        /*- [x] **Onboarding Tour**
+  - [x] Create simple overlay tour for first-time users
+  - [x] Highlight key features (Terminal, Search, Control Panel)*/
+        .tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tour-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .tour-highlight {
+            position: relative;
+            z-index: 9999;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.8), 0 0 50px rgba(34, 211, 238, 0.5);
+        }
+
+        .tour-tooltip {
+            position: fixed;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--accent-cyan);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .tour-tooltip.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tour-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .tour-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .tour-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .tour-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tour-btn-skip {
+            background: transparent;
+            color: var(--text-dim);
+        }
+
+        .tour-btn-next {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
         /* ✨ 噪点纹理叠加 (高级质感) */
         body::after {
             content: '';
@@ -238,6 +524,36 @@
         .command-card.revealed {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .control-panel-close:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-select {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-tertiary);
+            /* Use tertiary for solid background */
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-select:hover {
+            border-color: var(--accent-cyan);
+            background: var(--bg-card-hover);
+        }
+
+        .theme-select option {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
         /* ✨ 渐变边框悬浮效果 */
@@ -722,63 +1038,7 @@
             margin-top: 0.5rem;
         }
 
-        /* 收藏夹区域 */
-        .favorites-section {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-medium);
-        }
 
-        .favorites-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.75rem;
-            padding: 0 0.5rem;
-        }
-
-        .favorites-title {
-            font-size: 0.75rem;
-            color: var(--accent-orange);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .favorites-count {
-            background: var(--accent-orange);
-            color: var(--bg-primary);
-            font-size: 0.625rem;
-            padding: 0.125rem 0.375rem;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        .favorites-list {
-            list-style: none;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .favorites-empty {
-            text-align: center;
-            padding: 1.5rem 1rem;
-            color: var(--text-dim);
-            font-size: 0.8125rem;
-            font-style: italic;
-        }
-
-        [data-theme="light"] .favorites-title {
-            color: #ea580c;
-        }
-
-        [data-theme="light"] .favorites-count {
-            background: #ea580c;
-            color: #ffffff;
-        }
 
         .nav-list {
             list-style: none;
@@ -2278,16 +2538,1239 @@
                 font-size: 0.75rem;
             }
         }
+
+
+
+        /* ==================== 🎛️ Control Panel ==================== */
+        .control-panel-trigger {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 24px rgba(34, 211, 238, 0.5);
+            z-index: 1001;
+            transition: all var(--user-animation-duration) var(--animation-spring);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .control-panel-trigger:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 12px 32px rgba(34, 211, 238, 0.7);
+        }
+
+        .control-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 380px;
+            height: 100vh;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-left: 1px solid var(--border-medium);
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.5);
+            transform: translateX(100%);
+            transition: transform 0.4s var(--animation-spring);
+            z-index: 1002;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .control-panel.active {
+            transform: translateX(0);
+        }
+
+        .control-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-medium);
+        }
+
+        .control-panel-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .control-panel-close {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--user-animation-duration) ease;
+        }
+
+        .control-panel-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+        }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-icon {
+            font-size: 1.25rem;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .range-input {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+            transition: all var(--user-animation-duration) ease;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--gradient-cyan);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(34, 211, 238, 0.5);
+            transition: all var(--user-animation-duration) ease;
+        }
+
+        .range-input::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(34, 211, 238, 0.7);
+        }
+
+        .range-input::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--gradient-cyan);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(34, 211, 238, 0.5);
+            transition: all var(--user-animation-duration) ease;
+        }
+
+        .range-input::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(34, 211, 238, 0.7);
+        }
+
+        .range-value {
+            min-width: 60px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            background: rgba(34, 211, 238, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .animation-speed-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .speed-btn {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--user-animation-duration) ease;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .speed-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .speed-btn.active {
+            background: var(--gradient-cyan);
+            color: white;
+            border-color: transparent;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            transition: all var(--user-animation-duration) ease;
+            border: 1px solid var(--border-medium);
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: all var(--user-animation-duration) ease;
+        }
+
+        input:checked+.toggle-slider {
+            background: var(--gradient-cyan);
+            border-color: transparent;
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        [data-theme="light"] .control-panel {
+            background: rgba(255, 255, 255, 0.98);
+            border-left-color: #e2e8f0;
+        }
+
+        /* ==================== 🏷️ Difficulty Badges & Indicators ==================== */
+        .command-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all var(--user-animation-duration) ease;
+        }
+
+        .badge-difficulty-beginner {
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(52, 211, 153, 0.3);
+        }
+
+        .badge-difficulty-intermediate {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(251, 146, 60, 0.3);
+        }
+
+        .badge-difficulty-advanced {
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(244, 114, 182, 0.3);
+        }
+
+        .badge-frequency {
+            background: rgba(251, 146, 60, 0.15);
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            color: var(--accent-orange);
+        }
+
+        .badge-type {
+            background: rgba(34, 211, 238, 0.15);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            color: var(--accent-cyan);
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ==================== 🎨 Canvas Effects ==================== */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        [data-theme="light"] #particleCanvas {
+            opacity: 0.3;
+        }
+
+        /* ==================== 🔝 Back to Top Button ==================== */
+        .back-to-top {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-medium);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--user-animation-duration) ease;
+            z-index: 1000;
+            color: var(--accent-cyan);
+            font-size: 1.25rem;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--gradient-cyan);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(34, 211, 238, 0.4);
+        }
+
+        .back-to-top::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-cyan);
+            opacity: 0;
+            transition: opacity var(--user-animation-duration) ease;
+        }
+
+        .back-to-top:hover::before {
+            opacity: 0.3;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        /* ==================== ✨ Search Highlight Animation ==================== */
+        @keyframes search-highlight-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 20px rgba(34, 211, 238, 0);
+            }
+        }
+
+        .search-highlight-pulse {
+            animation: search-highlight-pulse 1.5s ease-in-out 2;
+        }
+
+        /* ==================== 📱 Responsive Adjustments ==================== */
+        @media (max-width: 768px) {
+            .stats-dashboard {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .control-panel {
+                width: 100%;
+            }
+
+            .control-panel-trigger {
+                bottom: 1rem;
+                right: 1rem;
+                width: 48px;
+                height: 48px;
+            }
+
+            .back-to-top {
+                bottom: 5rem;
+                right: 1rem;
+            }
+        }
+
+        /* Command Full Name (Etymology) */
+        .command-full-name {
+            font-size: 0.8em;
+            color: var(--text-dim);
+            font-weight: 400;
+            margin-left: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: normal;
+        }
+
+        /* Option Letter Hint */
+        .option-hint {
+            font-size: 0.7em;
+            color: var(--text-dim);
+            font-weight: 400;
+            margin-left: 0.3rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* ==================== 📟 Terminal Simulator ==================== */
+        .terminal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 400px;
+            background: rgba(10, 14, 26, 0.95);
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            /* Hidden by default */
+            flex-direction: column;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .terminal-container.active {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .terminal-header {
+            background: rgba(31, 41, 55, 0.8);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-medium);
+        }
+
+        .terminal-title {
+            color: #e5e7eb;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-title .terminal-icon {
+            color: #22d3ee;
+            font-weight: bold;
+        }
+
+        .terminal-controls button {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0 4px;
+            font-size: 1.1rem;
+        }
+
+        .terminal-controls button:hover {
+            color: #fff;
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            color: #22d3ee;
+            /* Terminal Green/Cyan */
+            font-size: 0.9rem;
+        }
+
+        .terminal-output div {
+            margin-bottom: 4px;
+        }
+
+        .terminal-output .cmd {
+            color: #fb923c;
+            /* Orange for highlighted commands */
+        }
+
+        .terminal-output .error {
+            color: #ef4444;
+        }
+
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-input-line .prompt {
+            color: #a78bfa;
+            margin-right: 8px;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #e5e7eb;
+            font-family: inherit;
+            font-size: inherit;
+            flex: 1;
+        }
+
+        /* ==================== ⌨️ Shortcuts Modal ==================== */
+        .shortcuts-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .shortcuts-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .shortcuts-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-medium);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .shortcuts-modal.active .shortcuts-content {
+            transform: scale(1);
+        }
+
+        .shortcuts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-medium);
+            padding-bottom: 1rem;
+        }
+
+        .shortcuts-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .close-shortcuts {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .shortcut-item kbd {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-medium);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-highlight);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .shortcut-item span {
+            color: var(--text-secondary);
+        }
+
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile Hamburger Menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .mobile-menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Mobile Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1400;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* ==================== 📱 Enhanced Responsive Design ==================== */
+
+        /* Tablet Optimization (768px - 1024px) */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .terminal-container {
+                width: 80%;
+                left: 10%;
+                height: 350px;
+            }
+
+            .control-panel {
+                width: 320px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile Optimization (< 768px) */
+        @media (max-width: 768px) {
+
+            /* Base Layout */
+            body {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            /* Navigation */
+            .navbar {
+                padding: 0.75rem 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+                margin-right: 1rem;
+            }
+
+            .nav-title {
+                font-size: 1.1rem;
+                flex: 1 1 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-controls {
+                flex: 1;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-controls button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .search-container {
+                flex: 1 1 100%;
+                margin-top: 0.5rem;
+            }
+
+            .search-input {
+                width: 100%;
+                font-size: 0.9rem;
+            }
+
+            /* Sidebar - Hidden by default on mobile */
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                width: 280px;
+                height: 100vh;
+                z-index: 1500;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            /* Main Content - Full width on mobile */
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            /* Breadcrumbs */
+            .breadcrumbs {
+                font-size: 0.8rem;
+                flex-wrap: wrap;
+            }
+
+            /* Stats Dashboard */
+            .stats-dashboard {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .chart-card {
+                padding: 1rem;
+            }
+
+            /* Command Cards */
+            .commands-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
+
+            .command-card {
+                padding: 1.25rem;
+            }
+
+            .command-name {
+                font-size: 1.1rem;
+            }
+
+            .command-full-name {
+                display: block;
+                margin-left: 0;
+                margin-top: 0.25rem;
+                font-size: 0.75rem;
+            }
+
+            .command-badges {
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .code-block {
+                font-size: 0.85rem;
+                padding: 0.75rem;
+            }
+
+            /* Terminal Simulator */
+            .terminal-container {
+                width: 95%;
+                left: 2.5%;
+                bottom: 1rem;
+                height: 60vh;
+                max-height: 400px;
+            }
+
+            .terminal-container.active {
+                width: 100%;
+                left: 0;
+                bottom: 0;
+                height: 70vh;
+                border-radius: 0;
+            }
+
+            .terminal-body {
+                font-size: 0.85rem;
+            }
+
+            .terminal-input {
+                font-size: 0.85rem;
+            }
+
+            /* Control Panel - Full screen on mobile */
+            .control-panel {
+                width: 100%;
+                transform: translateX(100%);
+            }
+
+            .control-panel.active {
+                transform: translateX(0);
+            }
+
+            .control-section {
+                padding: 1rem;
+            }
+
+            .control-label {
+                font-size: 0.9rem;
+            }
+
+            /* Shortcuts Modal */
+            .shortcuts-content {
+                width: 95%;
+                padding: 1.5rem;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .shortcuts-header h3 {
+                font-size: 1.25rem;
+            }
+
+            .shortcuts-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .shortcut-item {
+                padding: 0.75rem;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+            }
+
+            .shortcut-item kbd {
+                min-width: 40px;
+                padding: 0.5rem;
+                font-size: 1rem;
+            }
+
+            /* Control Panel Trigger */
+            .control-panel-trigger {
+                bottom: 1rem;
+                right: 1rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            /* Terminal Toggle Button */
+            .terminal-toggle-btn {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                background: rgba(13, 17, 23, 0.9);
+                color: var(--terminal-green);
+                border: 1px solid var(--terminal-green);
+                border-radius: 50%;
+                cursor: pointer;
+                z-index: 999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Fira Code', monospace;
+                font-weight: bold;
+                font-size: 1rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(5px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                opacity: 1;
+                /* Always fully visible */
+                border-width: 2px;
+                animation: btn-pulse 2s infinite ease-in-out;
+            }
+
+            .terminal-toggle-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(50, 255, 50, 0.15);
+                background: rgba(13, 17, 23, 1);
+                opacity: 1;
+            }
+
+            .terminal-toggle-btn:active {
+                transform: translateY(0);
+            }
+
+            @keyframes btn-pulse {
+                0% {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                    transform: scale(1);
+                }
+
+                50% {
+                    box-shadow: 0 0 20px rgba(50, 255, 50, 0.4);
+                    transform: scale(1.1);
+                }
+
+                100% {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                    transform: scale(1);
+                }
+            }
+
+            /* Back to Top Button */
+            .back-to-top {
+                bottom: 5rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.25rem;
+            }
+
+
+            /* Reduce particle count on mobile */
+            #particleCanvas {
+                opacity: 0.3;
+            }
+
+            /* Touch-friendly improvements */
+            button,
+            .command-card,
+            .stat-card {
+                min-height: 44px;
+                cursor: pointer;
+            }
+
+            /* Disable hover effects on touch devices */
+            @media (hover: none) {
+                .command-card:hover {
+                    transform: none;
+                }
+
+                .stat-card:hover {
+                    transform: none;
+                }
+            }
+        }
+
+        /* Extra Small Mobile (< 480px) */
+        @media (max-width: 480px) {
+            .nav-title {
+                font-size: 1rem;
+            }
+
+            .nav-controls button {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .command-card {
+                padding: 1rem;
+            }
+
+            .terminal-container.active {
+                height: 80vh;
+            }
+
+            .shortcuts-content {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .chart-card {
+                min-height: 200px;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- 🔄 Loading Overlay -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
     <!-- ✨ 滚动进度条 -->
     <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 🎨 Canvas Particle Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- 🔝 Back to Top Button -->
+    <div class="back-to-top" id="backToTop">↑</div>
+
+    <!-- 🎛️ Control Panel Trigger -->
+    <div class="control-panel-trigger" id="controlPanelTrigger">⚙️</div>
+
+    <!-- 🎛️ Control Panel -->
+    <div class="control-panel" id="controlPanel">
+        <div class="control-panel-header">
+            <div class="control-panel-title">⚙️ 设置面板</div>
+            <div class="control-panel-close" id="controlPanelClose">✕</div>
+        </div>
+
+        <!-- Theme Preset Control -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">🎨</span>
+                <span>主题预设</span>
+            </div>
+            <div class="range-container">
+                <select class="theme-select" id="themePreset">
+                    <option value="default">默认效果 (Default)</option>
+                    <option value="cyberpunk">赛博朋克 (Cyberpunk)</option>
+                    <option value="ubuntu">Ubuntu 风格</option>
+                    <option value="dracula">吸血鬼 (Dracula)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Font Size Control -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">🔤</span>
+                <span>字体大小</span>
+            </div>
+            <div class="range-container">
+                <input type="range" class="range-input" id="fontSizeRange" min="12" max="24" value="16" step="1">
+                <div class="range-value" id="fontSizeValue">16px</div>
+            </div>
+        </div>
+
+        <!-- Card Opacity Control -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">💎</span>
+                <span>卡片透明度</span>
+            </div>
+            <div class="range-container">
+                <input type="range" class="range-input" id="opacityRange" min="0.5" max="1" value="0.8" step="0.05">
+                <div class="range-value" id="opacityValue">0.8</div>
+            </div>
+        </div>
+
+        <!-- Blur Intensity Control -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">🌫️</span>
+                <span>模糊强度</span>
+            </div>
+            <div class="range-container">
+                <input type="range" class="range-input" id="blurRange" min="0" max="40" value="20" step="2">
+                <div class="range-value" id="blurValue">20px</div>
+            </div>
+        </div>
+
+        <!-- Animation Speed Control -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">⚡</span>
+                <span>动画速度</span>
+            </div>
+            <div class="animation-speed-buttons">
+                <div class="speed-btn" data-speed="0.5">🐌 慢速</div>
+                <div class="speed-btn active" data-speed="0.3">⚡ 正常</div>
+                <div class="speed-btn" data-speed="0.15">🚀 快速</div>
+                <div class="speed-btn" data-speed="0">❌ 关闭</div>
+            </div>
+        </div>
+
+        <!-- Code Block Width Control -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">📐</span>
+                <span>代码块宽度</span>
+            </div>
+            <div class="range-container">
+                <input type="range" class="range-input" id="codeWidthRange" min="80" max="100" value="100" step="5">
+                <div class="range-value" id="codeWidthValue">100%</div>
+            </div>
+        </div>
+
+        <!-- Particle Effects Toggle -->
+        <div class="control-group">
+            <div class="control-label">
+                <span class="control-icon">✨</span>
+                <span>粒子效果</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="particleToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="control-group">
+            <div class="speed-btn" id="resetSettings"
+                style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444;">
+                🔄 重置所有设置
+            </div>
+        </div>
+    </div>
 
     <!-- 顶部导航栏 -->
     <nav class="navbar">
         <div class="navbar-container">
+            <!-- Mobile Hamburger Menu -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <a href="#" class="navbar-logo">Linux 命令速查</a>
 
             <div class="navbar-search">
@@ -2303,6 +3786,11 @@
 
             <button class="theme-toggle" id="exportPDF" title="导出为 PDF" style="margin-left: 0.5rem;">
                 📄
+            </button>
+
+            <button class="theme-toggle" id="navbarTerminalBtn" title="打开终端 (Challenge Mode)"
+                style="margin-left: 0.5rem; color: #32ff32; border-color: rgba(50, 255, 50, 0.3);">
+                >_
             </button>
 
 
@@ -2325,18 +3813,7 @@
         <aside class="sidebar">
             <div class="sidebar-title">目录导航</div>
             <nav>
-                <!-- Favorites Section -->
-                <div class="favorites-section">
-                    <div class="favorites-header">
-                        <div class="favorites-title">
-                            ⭐ 我的收藏
-                            <span class="favorites-count" id="favoritesCount">0</span>
-                        </div>
-                    </div>
-                    <ul class="favorites-list" id="favoritesList">
-                        <li class="favorites-empty">暂无收藏命令</li>
-                    </ul>
-                </div>
+
 
                 <!-- Knowledge Hub Section -->
                 <div class="sidebar-group-title">📚 知识库</div>
@@ -2713,6 +4190,8 @@
                 </div>
                 <!-- 动态生成后续路径 -->
             </div>
+
+
 
             <!-- 页面标题 -->
             <header class="page-header">
@@ -11501,7 +12980,84 @@ done</code>
 
 
         </main>
+
+        <!-- 🦶 Footer -->
+        <footer class="main-footer">
+            <p>&copy; 2024 Linux Command Cheat Sheet. Made with ❤️ and <span
+                    style="color: var(--accent-cyan)">Linux</span>.</p>
+
+        </footer>
     </div>
+
+    <!-- ⌨️ Keyboard Shortcuts Modal -->
+    <div class="shortcuts-modal" id="shortcutsModal">
+        <div class="shortcuts-content">
+            <div class="shortcuts-header">
+                <h3>⌨️ 键盘快捷键</h3>
+                <button class="close-shortcuts" id="closeShortcuts">×</button>
+            </div>
+            <div class="shortcuts-grid">
+                <div class="shortcut-item">
+                    <kbd>/</kbd>
+                    <span>搜索命令</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>t</kbd>
+                    <span>切换主题 (深/浅)</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>d</kbd>
+                    <span>切换仪表板</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>j</kbd> / <kbd>k</kbd>
+                    <span>上下滚动页面</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>`</kbd>
+                    <span>打开/关闭 终端</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>?</kbd>
+                    <span>显示此帮助</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>esc</kbd>
+                    <span>关闭所有弹窗</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📟 Terminal Simulator -->
+    <div class="terminal-container" id="terminalContainer">
+        <div class="terminal-header">
+            <div class="terminal-title">
+                <span class="terminal-icon">_</span> guest@linux-cheat-sheet
+            </div>
+            <div class="terminal-controls">
+                <button class="terminal-minimize">_</button>
+                <button class="terminal-close">×</button>
+            </div>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+            <div class="terminal-output" id="terminalOutput">
+                <div>Welcome to Linux Cheat Sheet Shell v1.0</div>
+                <div>Type <span class="cmd">help</span> to see available commands.</div>
+                <div>Type <span class="cmd">matrix</span> to enter the Matrix.</div>
+                <br>
+            </div>
+            <div class="terminal-input-line">
+                <span class="prompt">guest@linux:~$</span>
+                <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Mobile Overlay for Sidebar -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
 
     <!-- Go to Top Button -->
     <button class="back-to-top" id="backToTop" title="回到顶部">
@@ -11513,6 +13069,1352 @@ done</code>
 
     <!-- JavaScript -->
     <script>
+        // ==================== 🎨 Canvas Visual Effects (Particles & Matrix) ====================
+        class ParticleBackground {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.width = 0;
+                this.height = 0;
+                this.particles = [];
+                this.particleCount = 50;
+                this.mouse = { x: null, y: null, radius: 150 };
+                this.symbols = ['$', '>', '#', '/', '~', '|', '-', '*'];
+
+                // Matrix Rain Properties
+                this.mode = 'particles'; // 'particles' or 'matrix'
+                this.matrixColumns = [];
+                this.matrixFontSize = 14;
+                this.matrixSymbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$<>#/%';
+
+                // Confetti
+                this.confetti = [];
+                this.confettiColors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
+
+                this.enabled = true;
+                this.init();
+            }
+
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.canvas.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.x;
+                    this.mouse.y = e.y;
+                });
+                this.canvas.addEventListener('mouseleave', () => {
+                    this.mouse.x = null;
+                    this.mouse.y = null;
+                });
+
+                this.createParticles();
+                this.initMatrix();
+                this.animate();
+            }
+
+            resize() {
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+                this.canvas.width = this.width;
+                this.canvas.height = this.height;
+                this.initMatrix(); // Re-calc columns
+            }
+
+            createParticles() {
+                this.particles = [];
+                for (let i = 0; i < this.particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.width,
+                        y: Math.random() * this.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        symbol: this.symbols[Math.floor(Math.random() * this.symbols.length)],
+                        size: Math.random() * 10 + 8
+                    });
+                }
+            }
+
+            initMatrix() {
+                const columns = Math.floor(this.width / this.matrixFontSize);
+                this.matrixColumns = Array(columns).fill(0);
+            }
+
+            setMode(mode) {
+                this.mode = mode;
+                if (mode === 'matrix') {
+                    this.canvas.style.opacity = '0.4'; // Dim background for matrix
+                } else {
+                    this.canvas.style.opacity = '1';
+                }
+            }
+
+            animate() {
+                if (!this.enabled) {
+                    requestAnimationFrame(() => this.animate());
+                    return;
+                }
+
+                if (this.mode === 'matrix') {
+                    this.animateMatrix();
+                } else {
+                    this.animateParticles();
+                }
+
+                this.updateConfetti();
+
+                requestAnimationFrame(() => this.animate());
+            }
+
+            triggerConfetti() {
+                for (let i = 0; i < 100; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = Math.random() * 10 + 5;
+                    this.confetti.push({
+                        x: this.width / 2,
+                        y: this.height / 2,
+                        vx: Math.cos(angle) * velocity,
+                        vy: Math.sin(angle) * velocity,
+                        color: this.confettiColors[Math.floor(Math.random() * this.confettiColors.length)],
+                        size: Math.random() * 6 + 4,
+                        life: 1.0,
+                        decay: Math.random() * 0.01 + 0.005,
+                        gravity: 0.2
+                    });
+                }
+            }
+
+            updateConfetti() {
+                if (this.confetti.length === 0) return;
+
+                // We don't clear rect here because we draw ON TOP of existing background (which clears itself)
+                // However, matrix mode dims background, so confetti might look weird if we don't save/restore state or handle opacity.
+                // Since this runs after animateMatrix/Particles, it draws over them.
+
+                this.confetti.forEach((p, i) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += p.gravity;
+                    p.life -= p.decay;
+
+                    if (p.life <= 0) {
+                        this.confetti.splice(i, 1);
+                    } else {
+                        this.ctx.globalAlpha = p.life;
+                        this.ctx.fillStyle = p.color;
+                        this.ctx.beginPath();
+                        this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.globalAlpha = 1.0;
+                    }
+                });
+            }
+
+            animateParticles() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+
+                // Get theme colors
+                const isDark = !document.documentElement.getAttribute('data-theme') ||
+                    document.documentElement.getAttribute('data-theme') === 'dark';
+                const particleColor = isDark ? 'rgba(34, 211, 238, 0.4)' : 'rgba(2, 132, 199, 0.3)';
+                const lineColor = isDark ? 'rgba(34, 211, 238, 0.15)' : 'rgba(2, 132, 199, 0.1)';
+
+                // Draw particles
+                this.particles.forEach((p, i) => {
+                    // Mouse interaction
+                    if (this.mouse.x && this.mouse.y) {
+                        const dx = this.mouse.x - p.x;
+                        const dy = this.mouse.y - p.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < this.mouse.radius) {
+                            const force = (this.mouse.radius - distance) / this.mouse.radius;
+                            p.x -= dx / distance * force * 2;
+                            p.y -= dy / distance * force * 2;
+                        }
+                    }
+
+                    // Move particles
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Bounce off edges
+                    if (p.x < 0 || p.x > this.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > this.height) p.vy *= -1;
+
+                    // Draw particle
+                    this.ctx.font = `${p.size}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillStyle = particleColor;
+                    this.ctx.fillText(p.symbol, p.x, p.y);
+
+                    // Draw lines to nearby particles
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const p2 = this.particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 120) {
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = lineColor;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.moveTo(p.x, p.y);
+                            this.ctx.lineTo(p2.x, p2.y);
+                            this.ctx.stroke();
+                        }
+                    }
+                });
+            }
+
+            animateMatrix() {
+                // Semi-transparent black to create trail effect
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+
+                this.ctx.fillStyle = '#0F0'; // Green text
+                this.ctx.font = `${this.matrixFontSize}px monospace`;
+
+                for (let i = 0; i < this.matrixColumns.length; i++) {
+                    const text = this.matrixSymbols.charAt(Math.floor(Math.random() * this.matrixSymbols.length));
+                    const x = i * this.matrixFontSize;
+                    const y = this.matrixColumns[i] * this.matrixFontSize;
+
+                    this.ctx.fillText(text, x, y);
+
+                    if (y > this.height && Math.random() > 0.975) {
+                        this.matrixColumns[i] = 0;
+                    }
+                    this.matrixColumns[i]++;
+                }
+            }
+
+            toggle(enabled) {
+                this.enabled = enabled;
+                if (!enabled) {
+                    this.ctx.clearRect(0, 0, this.width, this.height);
+                }
+            }
+        }
+
+        const particleBackground = new ParticleBackground();
+
+        // ==================== 🎛️ Control Panel Logic ====================
+        class ControlPanel {
+            constructor() {
+                this.panel = document.getElementById('controlPanel');
+                this.trigger = document.getElementById('controlPanelTrigger');
+                this.close = document.getElementById('controlPanelClose');
+                this.init();
+                this.loadSettings();
+            }
+
+            init() {
+                this.trigger.addEventListener('click', () => this.panel.classList.add('active'));
+                this.close.addEventListener('click', () => this.panel.classList.remove('active'));
+
+                // Theme Presets
+                const themePreset = document.getElementById('themePreset');
+                if (themePreset) {
+                    themePreset.addEventListener('change', (e) => {
+                        const theme = e.target.value;
+                        if (theme === 'default') {
+                            document.documentElement.removeAttribute('data-theme-preset');
+                        } else {
+                            document.documentElement.setAttribute('data-theme-preset', theme);
+                        }
+                        this.saveSettings();
+                    });
+                }
+
+                // Font Size
+                const fontSizeRange = document.getElementById('fontSizeRange');
+                const fontSizeValue = document.getElementById('fontSizeValue');
+                fontSizeRange.addEventListener('input', (e) => {
+                    const value = e.target.value + 'px';
+                    fontSizeValue.textContent = value;
+                    document.documentElement.style.setProperty('--user-font-size', value);
+                    document.body.style.fontSize = value;
+                    this.saveSettings();
+                });
+
+                // Card Opacity
+                const opacityRange = document.getElementById('opacityRange');
+                const opacityValue = document.getElementById('opacityValue');
+                opacityRange.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    opacityValue.textContent = value;
+                    document.documentElement.style.setProperty('--user-card-opacity', value);
+                    document.querySelectorAll('.command-card, .stat-card').forEach(card => {
+                        card.style.opacity = value;
+                    });
+                    this.saveSettings();
+                });
+
+                // Blur Intensity
+                const blurRange = document.getElementById('blurRange');
+                const blurValue = document.getElementById('blurValue');
+                blurRange.addEventListener('input', (e) => {
+                    const value = e.target.value + 'px';
+                    blurValue.textContent = value;
+                    document.documentElement.style.setProperty('--user-blur-intensity', value);
+                    this.saveSettings();
+                });
+
+                // Animation Speed
+                const speedBtns = document.querySelectorAll('.speed-btn[data-speed]');
+                speedBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        speedBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        const value = btn.dataset.speed + 's';
+                        document.documentElement.style.setProperty('--user-animation-duration', value);
+                        this.saveSettings();
+                    });
+                });
+
+                // Code Width
+                const codeWidthRange = document.getElementById('codeWidthRange');
+                const codeWidthValue = document.getElementById('codeWidthValue');
+                codeWidthRange.addEventListener('input', (e) => {
+                    const value = e.target.value + '%';
+                    codeWidthValue.textContent = value;
+                    document.documentElement.style.setProperty('--user-code-width', value);
+                    document.querySelectorAll('.code-block').forEach(block => {
+                        block.style.width = value;
+                    });
+                    this.saveSettings();
+                });
+
+                // Particle Toggle
+                const particleToggle = document.getElementById('particleToggle');
+                particleToggle.addEventListener('change', (e) => {
+                    particleBackground.toggle(e.target.checked);
+                    this.saveSettings();
+                });
+
+                // Reset Settings
+                document.getElementById('resetSettings').addEventListener('click', () => {
+                    localStorage.removeItem('controlPanelSettings');
+                    location.reload();
+                });
+            }
+
+            saveSettings() {
+                const settings = {
+                    themePreset: document.getElementById('themePreset').value,
+                    fontSize: document.getElementById('fontSizeRange').value,
+                    opacity: document.getElementById('opacityRange').value,
+                    blur: document.getElementById('blurRange').value,
+                    animationSpeed: document.querySelector('.speed-btn.active')?.dataset.speed,
+                    codeWidth: document.getElementById('codeWidthRange').value,
+                    particles: document.getElementById('particleToggle').checked
+                };
+                localStorage.setItem('controlPanelSettings', JSON.stringify(settings));
+            }
+
+            loadSettings() {
+                const saved = localStorage.getItem('controlPanelSettings');
+                if (!saved) return;
+
+                const settings = JSON.parse(saved);
+
+                if (settings.themePreset) {
+                    const themeSelect = document.getElementById('themePreset');
+                    if (themeSelect) {
+                        themeSelect.value = settings.themePreset;
+                        if (settings.themePreset !== 'default') {
+                            document.documentElement.setAttribute('data-theme-preset', settings.themePreset);
+                        }
+                    }
+                }
+
+                if (settings.fontSize) {
+                    document.getElementById('fontSizeRange').value = settings.fontSize;
+                    document.getElementById('fontSizeRange').dispatchEvent(new Event('input'));
+                }
+                if (settings.opacity) {
+                    document.getElementById('opacityRange').value = settings.opacity;
+                    document.getElementById('opacityRange').dispatchEvent(new Event('input'));
+                }
+                if (settings.blur) {
+                    document.getElementById('blurRange').value = settings.blur;
+                    document.getElementById('blurRange').dispatchEvent(new Event('input'));
+                }
+                if (settings.codeWidth) {
+                    document.getElementById('codeWidthRange').value = settings.codeWidth;
+                    document.getElementById('codeWidthRange').dispatchEvent(new Event('input'));
+                }
+                if (settings.particles !== undefined) {
+                    document.getElementById('particleToggle').checked = settings.particles;
+                    particleBackground.toggle(settings.particles);
+                }
+            }
+        }
+
+        const controlPanel = new ControlPanel();
+
+        // ==================== ⭐ Favorites System ====================
+        class FavoritesManager {
+            constructor() {
+                this.favorites = JSON.parse(localStorage.getItem('linux_favorites') || '[]');
+                this.isFilterActive = false;
+                this.init();
+            }
+
+            init() {
+                this.injectStarButtons();
+                this.injectFilterButton();
+            }
+
+            injectStarButtons() {
+                document.querySelectorAll('.command-card').forEach(card => {
+                    const nameEl = card.querySelector('.command-name');
+                    if (!nameEl) return;
+
+                    const fullText = nameEl.textContent.trim();
+
+                    const btn = document.createElement('button');
+                    btn.className = 'star-btn';
+                    btn.innerHTML = '★';
+                    btn.title = '收藏/取消收藏';
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.toggleFavorite(fullText, card);
+                    };
+                    card.style.position = 'relative';
+                    card.appendChild(btn);
+
+                    if (this.favorites.includes(fullText)) {
+                        card.classList.add('favorited');
+                    }
+                });
+            }
+
+            injectFilterButton() {
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle && themeToggle.parentNode) {
+                    const btn = document.createElement('button');
+                    btn.className = 'theme-toggle';
+                    btn.id = 'favoritesFilterBtn';
+                    btn.innerHTML = '⭐';
+                    btn.title = '只显示收藏';
+                    btn.style.marginLeft = '0.5rem';
+
+                    btn.addEventListener('click', () => {
+                        this.toggleFilter();
+                    });
+
+                    themeToggle.parentNode.insertBefore(btn, themeToggle);
+                }
+            }
+
+            toggleFavorite(name, card) {
+                if (this.favorites.includes(name)) {
+                    this.favorites = this.favorites.filter(n => n !== name);
+                    card.classList.remove('favorited');
+                } else {
+                    this.favorites.push(name);
+                    card.classList.add('favorited');
+
+                    // Simple confetti burst if available
+                    if (window.particleBackground && window.particleBackground.triggerConfetti) {
+                        // Optional: smaller burst? 
+                    }
+                }
+                localStorage.setItem('linux_favorites', JSON.stringify(this.favorites));
+
+                if (this.isFilterActive) {
+                    this.applyFilter();
+                }
+            }
+
+            toggleFilter() {
+                this.isFilterActive = !this.isFilterActive;
+                const btn = document.getElementById('favoritesFilterBtn');
+                if (this.isFilterActive) {
+                    btn.style.background = 'var(--accent-orange)';
+                    btn.style.color = '#fff';
+                    btn.style.borderColor = 'var(--accent-orange)';
+                } else {
+                    btn.style.background = '';
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                }
+                this.applyFilter();
+            }
+
+            applyFilter() {
+                const cards = document.querySelectorAll('.command-card');
+
+                cards.forEach(card => {
+                    if (!this.isFilterActive) {
+                        card.style.display = '';
+                        return;
+                    }
+
+                    if (card.classList.contains('favorited')) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                document.querySelectorAll('.category-section').forEach(sec => {
+                    if (!this.isFilterActive) {
+                        sec.style.display = '';
+                        return;
+                    }
+                    // Check if any visible cards in this section
+                    // We need to check children display status, not just 'favorited' class because search might hide them too?
+                    // But assume search + filter: search hides first, then filter hides? 
+                    // Actually, modifying display directly conflicts with Search logic if implemented simply.
+                    // Search usually sets display: none. 
+                    // We should probably integrate with Search or use a class '.hidden-by-filter'
+
+                    const visibleCards = Array.from(sec.querySelectorAll('.command-card')).filter(c => c.style.display !== 'none').length;
+                    sec.style.display = visibleCards > 0 ? '' : 'none';
+                });
+            }
+        }
+        const favoritesManager = new FavoritesManager();
+
+        // ==================== 🧭 Onboarding Tour ====================
+        class OnboardingTour {
+            constructor() {
+                this.steps = [
+                    {
+                        title: "🎉 Welcome!",
+                        desc: "Let's explore your new Interactive Cheat Sheet features.",
+                        target: null // Center
+                    },
+                    {
+                        title: "🔍 Instant Search",
+                        desc: "Type here to find any command instantly. Try fuzzy matching!",
+                        target: '.navbar-search'
+                    },
+                    {
+                        title: "💻 Interactive Terminal",
+                        desc: "Your terminal has moved! Click here (or `Ctrl + ` `) to simulate Linux commands.",
+                        target: '#navbarTerminalBtn'
+                    },
+                    {
+                        title: "⚙️ Customization",
+                        desc: "Change themes (Try Cyberpunk!), fonts, and animations to match your style.",
+                        target: '#controlPanelTrigger'
+                    }
+                ];
+                this.currentStep = 0;
+                this.init();
+            }
+
+            init() {
+                // Check if already completed
+                if (!localStorage.getItem('linux_tour_completed')) {
+                    // Delay slightly to allow loading
+                    setTimeout(() => this.startTour(), 1500);
+                }
+            }
+
+            startTour() {
+                this.createOverlay();
+                this.showStep(0);
+            }
+
+            createOverlay() {
+                this.overlay = document.createElement('div');
+                this.overlay.className = 'tour-overlay';
+                document.body.appendChild(this.overlay);
+
+                this.tooltip = document.createElement('div');
+                this.tooltip.className = 'tour-tooltip';
+                document.body.appendChild(this.tooltip);
+            }
+
+            showStep(index) {
+                if (index >= this.steps.length) {
+                    this.endTour();
+                    return;
+                }
+
+                const step = this.steps[index];
+                this.currentStep = index;
+
+                // Remove highlight from previous
+                document.querySelectorAll('.tour-highlight').forEach(el => {
+                    el.classList.remove('tour-highlight');
+                    el.style.boxShadow = ''; // Clear inline box-shadow if any
+                });
+
+                let targetEl = null;
+                if (step.target) {
+                    targetEl = document.querySelector(step.target);
+                    if (targetEl) {
+                        targetEl.classList.add('tour-highlight');
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+
+                // Update Tooltip Content
+                this.tooltip.innerHTML = `
+                    <div class="tour-title">${step.title}</div>
+                    <div class="tour-desc">${step.desc}</div>
+                    <div class="tour-buttons">
+                        <button class="tour-btn tour-btn-skip" onclick="window.tour.endTour()">Skip</button>
+                        <button class="tour-btn tour-btn-next" onclick="window.tour.nextStep()">${index === this.steps.length - 1 ? 'Finish' : 'Next'}</button>
+                    </div>
+                `;
+
+                this.overlay.classList.add('active');
+                this.tooltip.classList.add('active');
+
+                // Position Tooltip
+                if (targetEl) {
+                    const rect = targetEl.getBoundingClientRect();
+                    // Basic positioning: Below element, or above if too low
+                    // Ensure it stays on screen
+                    let left = rect.left;
+                    let top = rect.bottom + 20;
+
+                    if (left + 300 > window.innerWidth) left = window.innerWidth - 320;
+                    if (left < 10) left = 10;
+
+                    this.tooltip.style.left = left + 'px';
+                    this.tooltip.style.top = top + 'px';
+                    this.tooltip.style.transform = ''; // Reset centering
+                } else {
+                    // Center
+                    this.tooltip.style.left = '50%';
+                    this.tooltip.style.top = '50%';
+                    this.tooltip.style.transform = 'translate(-50%, -50%)';
+                }
+            }
+
+            nextStep() {
+                this.showStep(this.currentStep + 1);
+            }
+
+            endTour() {
+                this.tooltip.classList.remove('active');
+                this.overlay.classList.remove('active');
+                document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+                setTimeout(() => {
+                    this.tooltip.remove();
+                    this.overlay.remove();
+                }, 500);
+                localStorage.setItem('linux_tour_completed', 'true');
+            }
+        }
+
+        window.tour = new OnboardingTour();
+
+
+
+        // Initialize stats dashboard after DOM is loaded
+        setTimeout(() => {
+            // const statsDashboard = new StatsDashboard(); // Removed
+
+            const commandEtymology = new CommandEtymology();
+            const optionEtymology = new OptionEtymology();
+        }, 500);
+
+        // ==================== 📚 Command Etymology (Full Names) ====================
+        class CommandEtymology {
+            constructor() {
+                this.etymologyMap = {
+                    'ls': 'LiSt',
+                    'cd': 'Change Directory',
+                    'pwd': 'Print Working Directory',
+                    'mkdir': 'MaKe DIRectory',
+                    'rm': 'ReMove',
+                    'cp': 'CoPy',
+                    'mv': 'MoVe',
+                    'touch': 'TOUCH (update timestamps)',
+                    'find': 'FIND files',
+                    'which': 'WHICH executable',
+                    'whereis': 'WHERE IS binary/source',
+                    'type': 'TYPE of command',
+                    'ln': 'LiNk',
+                    'file': 'FILE type',
+                    'tree': 'directory TREE',
+                    'cat': 'conCATenate',
+                    'less': 'LESS is more (pager)',
+                    'head': 'HEAD of file',
+                    'tail': 'TAIL of file',
+                    'grep': 'Global Regular Expression Print',
+                    'wc': 'Word Count',
+                    'sort': 'SORT lines',
+                    'uniq': 'UNIQue lines',
+                    'awk': 'Aho, Weinberger, Kernighan (authors)',
+                    'sed': 'Stream EDitor',
+                    'cut': 'CUT fields',
+                    'tr': 'TRanslate characters',
+                    'diff': 'DIFFerence',
+                    'top': 'TOP processes',
+                    'ps': 'Process Status',
+                    'df': 'Disk Free',
+                    'du': 'Disk Usage',
+                    'free': 'FREE memory',
+                    'uname': 'Unix NAME',
+                    'htop': 'Htop (improved top)',
+                    'lsof': 'LiSt Open Files',
+                    'who': 'WHO is logged in',
+                    'w': 'Who is doing What',
+                    'last': 'LAST logins',
+                    'history': 'command HISTORY',
+                    'chmod': 'CHange MODe',
+                    'chown': 'CHange OWNer',
+                    'chgrp': 'CHange GRouP',
+                    'sudo': 'SuperUser DO',
+                    'su': 'Switch User',
+                    'passwd': 'PASSWorD',
+                    'ping': 'Packet INternet Groper',
+                    'ifconfig': 'InterFace CONFIGuration',
+                    'ip': 'Internet Protocol',
+                    'netstat': 'NETwork STATistics',
+                    'ss': 'Socket Statistics',
+                    'curl': 'Client URL',
+                    'wget': 'World Wide Web GET',
+                    'ssh': 'Secure SHell',
+                    'scp': 'Secure CoPy',
+                    'tar': 'Tape ARchive',
+                    'zip': 'ZIP compression',
+                    'unzip': 'UNZIP expansion',
+                    'gzip': 'GNU ZIP',
+                    'kill': 'KILL process',
+                    'killall': 'KILL ALL named processes',
+                    'systemctl': 'SYSTEM ConTroL',
+                    'journalctl': 'JOURNAL ConTroL',
+                    'bg': 'BackGround',
+                    'fg': 'ForeGround',
+                    'jobs': 'JOBS list',
+                    'nohup': 'NO Hang UP',
+                    'mount': 'MOUNT filesystem',
+                    'umount': 'UnMOUNT filesystem',
+                    'fdisk': 'Fixed DISK',
+                    'mkfs': 'MaKe FileSystem',
+                    'yum': 'Yellowdog Updater, Modified',
+                    'apt': 'Advanced Packaging Tool',
+                    'rpm': 'Red Hat Packet Manager',
+                    'alias': 'Create ALIAS',
+                    'export': 'EXPORT variable',
+                    'man': 'MANual pages',
+                    'help': 'HELP info',
+                    'date': 'DATE and time',
+                    'cal': 'CALendar',
+                    'bc': 'Basic Calculator'
+                };
+                this.init();
+            }
+
+            init() {
+                document.querySelectorAll('.command-name').forEach(el => {
+                    const cmd = el.textContent.trim();
+                    // Handle cases like "whatis / apropos" - just take the first one
+                    const mainCmd = cmd.split(' ')[0].split('/')[0].trim();
+
+                    if (this.etymologyMap[mainCmd]) {
+                        const fullName = this.etymologyMap[mainCmd];
+                        const span = document.createElement('span');
+                        span.className = 'command-full-name';
+                        span.textContent = `(${fullName})`;
+                        el.appendChild(span);
+                    }
+                });
+            }
+        }
+
+        // ==================== 📖 Option Etymology (Letter Meanings) ====================
+        class OptionEtymology {
+            constructor() {
+                this.optionMap = {
+                    '-a': 'all',
+                    '-A': 'Almost all',
+                    '-i': 'interactive',
+                    '-I': 'Interactive',
+                    '-r': 'recursive',
+                    '-R': 'Recursive',
+                    '-f': 'force',
+                    '-F': 'Force',
+                    '-v': 'verbose',
+                    '-V': 'Version',
+                    '-h': 'human-readable',
+                    '-H': 'Help',
+                    '-n': 'number',
+                    '-N': 'Number',
+                    '-l': 'long',
+                    '-L': 'Long',
+                    '-d': 'directory',
+                    '-D': 'Directory',
+                    '-p': 'preserve',
+                    '-P': 'Parent',
+                    '-t': 'time',
+                    '-T': 'Target',
+                    '-u': 'user',
+                    '-U': 'Update',
+                    '-g': 'group',
+                    '-G': 'Group',
+                    '-o': 'output',
+                    '-O': 'Output',
+                    '-e': 'expression',
+                    '-E': 'Extended',
+                    '-s': 'size',
+                    '-S': 'Sort',
+                    '-c': 'count',
+                    '-C': 'Create',
+                    '-x': 'extract',
+                    '-X': 'eXclude',
+                    '-z': 'zip',
+                    '-Z': 'Compress',
+                    '-k': 'keep',
+                    '-K': 'Keep',
+                    '-m': 'modify',
+                    '-M': 'Move',
+                    '-w': 'word',
+                    '-W': 'Write',
+                    '-q': 'quiet',
+                    '-Q': 'Quiet',
+                    '-y': 'yes',
+                    '-Y': 'Yes',
+                    '-b': 'backup',
+                    '-B': 'Block',
+                    '-j': 'jobs',
+                    '-J': 'Jobs'
+                };
+                this.init();
+            }
+
+            init() {
+                // Find all option tables
+                document.querySelectorAll('.options-table').forEach(table => {
+                    const rows = table.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        if (cells.length >= 2) {
+                            const optionCell = cells[0];
+                            const optionText = optionCell.textContent.trim();
+
+                            // Check if it's a single option (like -a, -l, etc.)
+                            const match = optionText.match(/^(-[a-zA-Z])$/);
+                            if (match) {
+                                const option = match[1];
+                                const meaning = this.optionMap[option];
+
+                                if (meaning) {
+                                    // Check if hint already exists
+                                    if (!optionCell.querySelector('.option-hint')) {
+                                        const hint = document.createElement('span');
+                                        hint.className = 'option-hint';
+                                        hint.textContent = `(${meaning})`;
+                                        optionCell.appendChild(hint);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+        }
+
+        // ==================== 🎮 Quiz Manager (Gamification) ====================
+        class QuizManager {
+            constructor() {
+                this.isActive = false;
+                this.score = 0;
+                this.currentQuestion = null;
+                this.questions = [
+                    { q: "List all files including hidden ones.", a: "ls -a", hint: "Use the 'all' option." },
+                    { q: "Show current directory path.", a: "pwd", hint: "Print Working Directory" },
+                    { q: "Display content of 'skills.txt'.", a: "cat skills.txt", hint: "Concatenate and print" },
+                    { q: "Check disk usage in human readable format.", a: "df -h", hint: "Use 'disk free' with 'human' option" },
+                    { q: "Show active processes.", a: "ps", hint: "Process Status" },
+                    { q: "Clear the terminal screen.", a: "clear", hint: "Just 'clear' it" },
+                    { q: "Show today's date.", a: "date", hint: "Simple 'date' command" },
+                    { q: "Who are you logged in as.", a: "whoami", hint: "Who am I?" },
+                    { q: "Create a new directory named 'test'.", a: "mkdir test", hint: "Make Directory" },
+                    { q: "Remove file 'junk.txt'.", a: "rm junk.txt", hint: "Remove" },
+                    // New Phase 7 Questions
+                    { q: "Pipe output of 'ls' to 'grep' to find 'js' files.", a: "ls | grep js", hint: "Use result of one command as input for another" },
+                    { q: "Append output of 'date' to 'log.txt'.", a: "date >> log.txt", hint: "Redirect output and append (>>)" },
+                    { q: "Make 'script.sh' executable for owner.", a: "chmod u+x script.sh", hint: "Change mode: owner + executable" }
+                ];
+                // Shuffle questions for randomness (simple shuffle)
+                this.questions.sort(() => Math.random() - 0.5);
+                this.currentIndex = 0;
+            }
+
+            start() {
+                this.isActive = true;
+                this.score = 0;
+                this.currentIndex = 0;
+                // Reshuffle on start
+                this.questions.sort(() => Math.random() - 0.5);
+                return `Welcome to Command Challenge! 🎮\nCorrect answer: +10 pts\nWrong answer: -5 pts\nType 'exit' to quit.\n\nQuestion 1: ${this.questions[0].q}`;
+            }
+
+            checkAnswer(input) {
+                if (input.toLowerCase() === 'exit') {
+                    this.isActive = false;
+                    return `Quiz ended. Final Score: ${this.score} 🏆`;
+                }
+
+                const currentQ = this.questions[this.currentIndex];
+                if (input.trim() === currentQ.a) {
+                    this.score += 10;
+                    this.currentIndex++;
+
+                    // Trigger Confetti!
+                    if (window.particleBackground) {
+                        window.particleBackground.triggerConfetti();
+                    }
+
+                    if (this.currentIndex >= this.questions.length) {
+                        this.isActive = false;
+                        return `✅ Correct!\n\n🎉 Challenge Complete! Final Score: ${this.score}/${this.questions.length * 10}`;
+                    }
+
+                    return `✅ Correct! (+10 pts)\n\nQuestion ${this.currentIndex + 1}: ${this.questions[this.currentIndex].q}`;
+                } else {
+                    this.score = Math.max(0, this.score - 5);
+                    return `❌ Incorrect. Try again (-5 pts)\nHint: ${currentQ.hint}`;
+                }
+            }
+        }
+
+        // ==================== 📟 Terminal Simulator ====================
+        class TerminalSimulator {
+            constructor() {
+                this.container = document.getElementById('terminalContainer');
+                this.header = document.querySelector('.terminal-header');
+                this.body = document.getElementById('terminalBody');
+                this.output = document.getElementById('terminalOutput');
+                this.input = document.getElementById('terminalInput');
+                this.closeBtn = document.querySelector('.terminal-close');
+                this.minimizeBtn = document.querySelector('.terminal-minimize');
+                this.isOpen = false;
+                this.hasShownHint = false;
+
+                // Quiz Manager Integration
+                this.quizManager = new QuizManager();
+
+                // File System Mock
+                this.fileSystem = {
+                    '~': {
+                        'resume.pdf': 'Paper version of my life (PDF content placeholder)',
+                        'skills.txt': 'Languages: Python, JavaScript, Java\nTools: Docker, Kubernetes, Git, Linux\nCloud: AWS, GCP',
+                        'projects/': ['linux-cheat-sheet', 'portfolio', 'ai-agent'],
+                        '.config': 'Secret settings: \n- matrix_mode: enabled\n- god_mode: false'
+                    }
+                };
+
+                this.history = [];
+                this.historyIndex = -1;
+
+                // Audio Context for Keyboard Sounds
+                this.audioCtx = null;
+                this.soundEnabled = true;
+
+                // Load Settings and History
+                this.loadSettings();
+
+                // Draggable State
+                this.isDragging = false;
+                this.dragOffset = { x: 0, y: 0 };
+
+                // Konami Code State
+                this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+                this.konamiIndex = 0;
+
+                this.init();
+            }
+
+            init() {
+                // Initialize Audio on first interaction
+                window.addEventListener('click', () => {
+                    if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }, { once: true });
+
+                // Event Listeners
+                this.closeBtn.addEventListener('click', () => this.toggle());
+                this.minimizeBtn.addEventListener('click', () => this.toggle());
+
+                this.container.addEventListener('click', () => this.input.focus());
+
+                // Input Handling
+                this.input.addEventListener('keydown', (e) => {
+                    this.playKeySound();
+
+                    if (e.key === 'Enter') {
+                        const cmd = this.input.value.trim();
+                        this.execute(cmd);
+                        this.input.value = '';
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (this.history.length > 0 && this.historyIndex < this.history.length - 1) {
+                            this.historyIndex++;
+                            this.input.value = this.history[this.history.length - 1 - this.historyIndex];
+                        }
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (this.historyIndex > 0) {
+                            this.historyIndex--;
+                            this.input.value = this.history[this.history.length - 1 - this.historyIndex];
+                        } else if (this.historyIndex === 0) {
+                            this.historyIndex = -1;
+                            this.input.value = '';
+                        }
+                    }
+                });
+
+                // Global Konami Code Listener
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === this.konamiCode[this.konamiIndex]) {
+                        this.konamiIndex++;
+                        if (this.konamiIndex === this.konamiCode.length) {
+                            this.triggerGodMode();
+                            this.konamiIndex = 0;
+                        }
+                    } else {
+                        // Reset if sequence breaks
+                        this.konamiIndex = 0;
+                        if (e.key === 'ArrowUp') this.konamiIndex = 1;
+                    }
+                });
+
+                // Dragging Logic
+                this.header.addEventListener('mousedown', (e) => {
+                    this.isDragging = true;
+                    // Remove transform to allow direct positioning
+                    this.container.style.transform = 'none';
+                    this.dragOffset.x = e.clientX - this.container.offsetLeft;
+                    this.dragOffset.y = e.clientY - this.container.offsetTop;
+                    this.container.style.transition = 'none'; // Disable transition during drag
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (this.isDragging) {
+                        e.preventDefault();
+                        const x = e.clientX - this.dragOffset.x;
+                        const y = e.clientY - this.dragOffset.y;
+
+                        // Bounds check
+                        const maxX = window.innerWidth - this.container.offsetWidth;
+                        const maxY = window.innerHeight - this.container.offsetHeight;
+
+                        this.container.style.left = `${Math.max(0, Math.min(x, maxX))}px`;
+                        this.container.style.top = `${Math.max(0, Math.min(y, maxY))}px`;
+                        this.container.style.bottom = 'auto'; // Reset bottom since we use top
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (this.isDragging) {
+                        this.isDragging = false;
+                        this.container.style.transition = 'all 0.3s ease'; // Re-enable transition
+                    }
+                });
+            }
+
+            playKeySound() {
+                if (!this.soundEnabled || !this.audioCtx) return;
+
+                const osc = this.audioCtx.createOscillator();
+                const gain = this.audioCtx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800 + Math.random() * 200, this.audioCtx.currentTime); // Random pitch
+                gain.gain.setValueAtTime(0.05, this.audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.05); // Short click
+
+                osc.connect(gain);
+                gain.connect(this.audioCtx.destination);
+
+                osc.start();
+                osc.stop(this.audioCtx.currentTime + 0.05);
+            }
+
+            toggle() {
+                this.isOpen = !this.isOpen;
+                if (this.isOpen) {
+                    this.container.classList.add('active');
+                    this.input.focus();
+                    // Hint for new users
+                    if (!this.hasShownHint) {
+                        this.print("💡 Tip: Type 'quiz' to test your skills!", 'cmd');
+                        this.print("----------------------------------------");
+                        this.hasShownHint = true;
+                    }
+                } else {
+                    this.container.classList.remove('active');
+                }
+            }
+
+            triggerGodMode() {
+                // Konami Code Effect: Rainbow Mode
+                document.body.style.animation = 'rainbow 5s infinite';
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes rainbow { 
+                        0% { filter: hue-rotate(0deg); } 
+                        100% { filter: hue-rotate(360deg); } 
+                    }
+                `;
+                document.head.appendChild(style);
+
+                // Show notification
+                if (this.isOpen) {
+                    this.print('GOD MODE ENABLED: Unlimited Power!', 'cmd');
+                } else {
+                    this.toggle();
+                    setTimeout(() => {
+                        this.print('GOD MODE ENABLED: Unlimited Power!', 'cmd');
+                    }, 300);
+                }
+            }
+
+            execute(cmdString) {
+                if (!cmdString) return;
+
+                this.history.push(cmdString);
+                this.saveHistory();
+                this.historyIndex = -1;
+
+                this.print(`guest@linux:~$ ${cmdString}`, 'cmd');
+
+                // Quiz Mode Interception
+                if (this.quizManager.isActive) {
+                    const result = this.quizManager.checkAnswer(cmdString);
+                    this.print(result);
+                    this.scrollToBottom();
+                    return;
+                }
+
+                const args = cmdString.split(' ');
+                const cmd = args[0].toLowerCase();
+
+                switch (cmd) {
+                    case 'help':
+                        this.print('Available commands:');
+                        this.print('  ls, pwd, whoami, date, clear, matrix');
+                        this.print('  cat [file], open [url], sudo [cmd]');
+                        this.print('  mute / unmute (Toggle typing sound)');
+                        this.print('  quiz (Start Challenge Mode!)');
+                        break;
+                    case 'mute':
+                        this.soundEnabled = false;
+                        localStorage.setItem('terminal_sound', 'false');
+                        this.print('Sound muted. 🔇');
+                        break;
+                    case 'unmute':
+                        this.soundEnabled = true;
+                        localStorage.setItem('terminal_sound', 'true');
+                        this.print('Sound enabled. 🔊');
+                        break;
+                    case 'history':
+                        if (args[1] === '-c') {
+                            this.history = [];
+                            localStorage.removeItem('terminal_history');
+                            this.print('History cleared.');
+                        } else {
+                            this.history.forEach((h, i) => this.print(`${i + 1}  ${h}`));
+                        }
+                        break;
+                        break;
+                    case 'ls':
+                        this.print('resume.pdf  skills.txt  projects/  .config');
+                        break;
+                    case 'pwd':
+                        this.print('/home/guest');
+                        break;
+                    case 'whoami':
+                        this.print('guest');
+                        break;
+                    case 'date':
+                        this.print(new Date().toString());
+                        break;
+                    case 'clear':
+                        this.output.innerHTML = '';
+                        break;
+                    case 'matrix':
+                        this.print('Wake up, Neo...');
+                        setTimeout(() => {
+                            particleBackground.setMode('matrix');
+                            document.getElementById('particleToggle').checked = true;
+                            particleBackground.toggle(true);
+                            this.toggle(); // Close terminal to see effect
+                        }, 1000);
+                        break;
+                    case 'cat':
+                        if (args[1]) {
+                            const fileName = args[1];
+                            const content = this.fileSystem['~'][fileName];
+                            if (content) {
+                                this.print(content);
+                            } else {
+                                this.print(`cat: ${fileName}: No such file or directory`, 'error');
+                            }
+                        } else {
+                            this.print('usage: cat [file]');
+                        }
+                        break;
+                    case 'open':
+                        if (args[1]) {
+                            this.print(`Opening ${args[1]}...`);
+                            window.open(args[1].startsWith('http') ? args[1] : 'https://' + args[1], '_blank');
+                        } else {
+                            this.print('usage: open [url]');
+                        }
+                        break;
+                    case 'sudo':
+                        if (args[1] === 'rm' && args[2] === '-rf' && args[3] === '/') {
+                            this.print('Nice try. I am not letting you delete the internet.', 'error');
+                        } else {
+                            this.print('guest is not in the sudoers file. This incident will be reported.', 'error');
+                        }
+                        break;
+                    case 'quiz':
+                        const startMsg = this.quizManager.start();
+                        this.print(startMsg);
+                        break;
+                    case 'exit':
+                        this.toggle();
+                        break;
+                    default:
+                        this.print(`Command not found: ${cmd}`, 'error');
+                }
+
+                this.scrollToBottom();
+            }
+
+            saveHistory() {
+                // Keep last 50 commands
+                if (this.history.length > 50) this.history = this.history.slice(-50);
+                localStorage.setItem('terminal_history', JSON.stringify(this.history));
+            }
+
+            loadSettings() {
+                // Load sound preference
+                const soundPref = localStorage.getItem('terminal_sound');
+                if (soundPref !== null) {
+                    this.soundEnabled = soundPref === 'true';
+                }
+
+                // Load history
+                const savedHistory = localStorage.getItem('terminal_history');
+                if (savedHistory) {
+                    try {
+                        this.history = JSON.parse(savedHistory);
+                    } catch (e) {
+                        console.error('Failed to load history', e);
+                        this.history = [];
+                    }
+                }
+            }
+
+            print(text, type = '') {
+                const div = document.createElement('div');
+                div.textContent = text;
+                // Preserve whitespace for preformatted text if needed
+                div.style.whiteSpace = 'pre-wrap';
+                if (type) div.className = type;
+                this.output.appendChild(div);
+            }
+
+            scrollToBottom() {
+                this.body.scrollTop = this.body.scrollHeight;
+            }
+        }
+
+        // ==================== ⌨️ Shortcuts Manager ====================
+        class ShortcutManager {
+            constructor() {
+                this.modal = document.getElementById('shortcutsModal');
+                this.closeBtn = document.getElementById('closeShortcuts');
+                this.terminal = null; // Will be set after init
+                this.init();
+            }
+
+            setTerminal(terminal) {
+                this.terminal = terminal;
+            }
+
+            init() {
+                // Toggle Modal
+                document.addEventListener('keydown', (e) => {
+                    // Ignore if typing in input
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+                    if (e.key === '?' && e.shiftKey) {
+                        this.toggleModal();
+                    } else if (e.key === '/') {
+                        e.preventDefault();
+                        document.querySelector('.search-input').focus();
+                    } else if (e.key === 't') {
+                        document.getElementById('themeToggle').click();
+                    } else if (e.key === 'd') {
+                        document.getElementById('dashboardToggle').click();
+                    } else if (e.key === '`') {
+                        this.terminal?.toggle();
+                    } else if (e.key === 'j') {
+                        window.scrollBy(0, 100);
+                    } else if (e.key === 'k') {
+                        window.scrollBy(0, -100);
+                    } else if (e.key === 'Escape') {
+                        this.modal.classList.remove('active');
+                        this.terminal?.container.classList.remove('active');
+                    }
+                });
+
+                this.closeBtn.addEventListener('click', () => this.toggleModal());
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.toggleModal();
+                });
+
+            }
+
+            toggleModal() {
+                this.modal.classList.toggle('active');
+            }
+        }
+
+        // Initialize Phase 2 components
+        setTimeout(() => {
+            const terminal = new TerminalSimulator();
+            const shortcuts = new ShortcutManager();
+            shortcuts.setTerminal(terminal);
+
+
+            // Connect Navbar Terminal Button
+            const navbarTerminalBtn = document.getElementById('navbarTerminalBtn');
+            if (navbarTerminalBtn) {
+                navbarTerminalBtn.addEventListener('click', () => {
+                    terminal.toggle();
+                });
+            }
+        }, 600);
+
+        // ==================== 📱 Mobile Menu Toggle ====================
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function toggleMobileMenu() {
+            mobileMenuToggle.classList.toggle('active');
+            sidebar.classList.toggle('mobile-open');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+        }
+
+        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+        // Close sidebar when clicking on a category link (mobile)
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.category-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (sidebar.classList.contains('mobile-open')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+        }
+
         // 返回顶部按钮
         const backToTopBtn = document.getElementById('backToTop');
 
@@ -11575,130 +14477,6 @@ done</code>
         });
 
 
-        // ==================== 收藏系统 ====================
-        class FavoritesManager {
-            constructor() {
-                this.storageKey = 'linux_cheatsheet_favorites';
-                this.favorites = this.loadFavorites();
-                this.init();
-            }
-
-            loadFavorites() {
-                try {
-                    const saved = localStorage.getItem(this.storageKey);
-                    return saved ? JSON.parse(saved) : [];
-                } catch (e) {
-                    console.error('Failed to load favorites:', e);
-                    return [];
-                }
-            }
-
-            saveFavorites() {
-                try {
-                    localStorage.setItem(this.storageKey, JSON.stringify(this.favorites));
-                } catch (e) {
-                    console.error('Failed to save favorites:', e);
-                }
-            }
-
-            init() {
-                // 为所有命令卡片添加收藏按钮
-                document.querySelectorAll('.command-card').forEach(card => {
-                    const header = card.querySelector('.command-header');
-                    const commandName = card.querySelector('.command-name');
-                    if (header && commandName) {
-                        const cmdId = commandName.textContent.trim();
-                        const bookmarkBtn = document.createElement('button');
-                        bookmarkBtn.className = 'bookmark-btn';
-                        bookmarkBtn.innerHTML = this.isFavorite(cmdId) ? '★' : '☆';
-                        bookmarkBtn.title = '收藏此命令';
-                        bookmarkBtn.dataset.command = cmdId;
-
-                        if (this.isFavorite(cmdId)) {
-                            bookmarkBtn.classList.add('active');
-                        }
-
-                        bookmarkBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            this.toggleFavorite(cmdId, bookmarkBtn);
-                        });
-
-                        header.appendChild(bookmarkBtn);
-                    }
-                });
-
-                this.renderFavoritesList();
-            }
-
-            isFavorite(cmdId) {
-                return this.favorites.includes(cmdId);
-            }
-
-            toggleFavorite(cmdId, btn) {
-                if (this.isFavorite(cmdId)) {
-                    this.favorites = this.favorites.filter(id => id !== cmdId);
-                    btn.innerHTML = '☆';
-                    btn.classList.remove('active');
-                } else {
-                    this.favorites.push(cmdId);
-                    btn.innerHTML = '★';
-                    btn.classList.add('active');
-                }
-                this.saveFavorites();
-                this.renderFavoritesList();
-            }
-
-            renderFavoritesList() {
-                const favoritesList = document.getElementById('favoritesList');
-                const favoritesCount = document.getElementById('favoritesCount');
-
-                favoritesCount.textContent = this.favorites.length;
-
-                if (this.favorites.length === 0) {
-                    favoritesList.innerHTML = '<li class="favorites-empty">暂无收藏命令</li>';
-                    return;
-                }
-
-                favoritesList.innerHTML = this.favorites.map(cmdId => `
-                    <li class="nav-sub-item">
-                        <button class="cmd-tag" onclick="document.querySelector('.command-name:contains(${cmdId})')?.closest('.command-card')?.scrollIntoView({behavior: 'smooth', block: 'center'})">${cmdId}</button>
-                    </li>
-                `).join('');
-
-                // 为收藏列表中的按钮添加点击事件
-                favoritesList.querySelectorAll('.cmd-tag').forEach(btn => {
-                    const cmdId = btn.textContent.trim();
-                    btn.addEventListener('click', () => {
-                        // 找到对应的命令卡片
-                        const cards = document.querySelectorAll('.command-card');
-                        for (const card of cards) {
-                            const nameEl = card.querySelector('.command-name');
-                            if (nameEl && nameEl.textContent.trim() === cmdId) {
-                                // Calculate scroll position with offset
-                                const offset = 140;
-                                const elementRect = card.getBoundingClientRect();
-                                const absoluteElementTop = elementRect.top + window.pageYOffset;
-                                const offsetPosition = absoluteElementTop - offset;
-
-                                window.scrollTo({
-                                    top: offsetPosition,
-                                    behavior: 'smooth'
-                                });
-                                // 高亮显示
-                                card.style.outline = '2px solid var(--accent-orange)';
-                                setTimeout(() => {
-                                    card.style.outline = '';
-                                }, 2000);
-                                break;
-                            }
-                        }
-                    });
-                });
-            }
-        }
-
-        // 初始化收藏系统
-        const favoritesManager = new FavoritesManager();
 
         // ==================== 难度标识系统 ====================
         const difficultyLevels = {
@@ -11918,11 +14696,13 @@ done</code>
                 cards.forEach(card => {
                     if (filterCommand) {
                         const cmdNameRaw = card.querySelector('.command-name').textContent.trim();
+                        // 移除 Etymology 后缀 (例如 "ls(LiSt)" -> "ls")
+                        const cleanCmdName = cmdNameRaw.replace(/\s*\(.*?\).*$/, '').replace(/\(.*\)/, '').trim();
                         // 支持组合指令（如 "shutdown / reboot"），通过 "/" 分割匹配
-                        const cmdNames = cmdNameRaw.split('/').map(s => s.trim());
+                        const cmdNames = cleanCmdName.split('/').map(s => s.trim());
 
                         // 过滤显示
-                        if (cmdNames.includes(filterCommand) || cmdNameRaw === filterCommand) {
+                        if (cmdNames.includes(filterCommand) || cleanCmdName === filterCommand) {
                             card.style.display = 'block';
                             card.style.animation = 'fadeSlideIn 0.3s ease-out';
                         } else {
@@ -12475,6 +15255,14 @@ done</code>
                     showToast('复制失败', 'error');
                 });
             });
+        });
+    </script>
+    <script>
+        // 🔄 Loader Logic (Re-injected)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 300); // Slight delay for smooth effect
         });
     </script>
 </body>
